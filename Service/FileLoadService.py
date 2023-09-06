@@ -1,21 +1,27 @@
 from tkinter import filedialog as fd
 import os
 
-# return an object with all the files in a given folder
-def load_folder():
-    return os.listdir(fd.askdirectory())
 
-def file_names_in_folder(folder):
-    fileList = [""]
-    i: int = 0
-    for filename in folder:
-        fileList.insert(i, filename.title())
-        i += 1
+# return an object with all the files in a given folder
+# def load_folder():
+#     return
+
+
+#mock: read and return a list of all file names with .cs
+#real: read and return relevant data after processing file; data should be stored in a map?
+
+def process_data_from_folder():
+    fileList = []
+    folder = fd.askdirectory()
+    root_dir = os.path.relpath(folder)
+    for root,dirs,files in os.walk(folder):
+        for file in files:
+            if file.endswith('.cs'):
+                fileList.append(os.path.join(os.path.relpath(root_dir,file),file))
     return fileList
 
 
-#TODO: read all files from subfolders
 
-filelist = file_names_in_folder(load_folder())
+filelist = process_data_from_folder()
 
 print(filelist)
