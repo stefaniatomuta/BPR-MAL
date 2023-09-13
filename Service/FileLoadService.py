@@ -10,6 +10,8 @@ def process_data_from_folder():
     filePathName = []
     fileName = []
     folder = fd.askdirectory()
+    gitignorecontent = read_gitignore(folder)
+    print("\n".join(gitignorecontent))
     exclude = set['.git','.idea','bin','obj']
     method_pattern = r'\b[A-Z]\w*(?=\s*\()'
     usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
@@ -32,5 +34,15 @@ def process_data_from_folder():
                 row = [parent_dir, file_rel_path, file_name, method_matches, usings_matches]
                 write_row_to_csv(row)
 
-process_data_from_folder()
 
+def read_gitignore(folder):
+    gitignore_content = []
+    for root,dirs,files in os.walk(folder):
+        for file_name in files:
+            if file_name.__eq__('.gitignore'):
+                with open(os.path.join(root,file_name), 'r') as file:
+                    lines = file.readlines()
+                    gitignore_content.extend([line.strip() for line in lines if not (line.strip().startswith("#") or not line.strip())])
+    return gitignore_content
+
+process_data_from_folder()

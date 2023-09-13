@@ -1,3 +1,1 @@
-import os
-
-os.environ['DATA_PATH'] = "..\data.csv"
+DATA_PATH = '..\Data\data.csv'
