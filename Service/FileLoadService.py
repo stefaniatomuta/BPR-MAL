@@ -11,7 +11,7 @@ def process_data_from_folder():
     fileName = []
     folder = fd.askdirectory()
     exclude = set['.git','.idea','bin','obj']
-    method_pattern = r'[a-zA-Z][a-zA-Z0-9]+\([a-zA-Z][a-zA-Z0-9]+\)'
+    method_pattern = r'\b[A-Z]\w*(?=\s*\()'
     usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
 
     for root,dirs,files in os.walk(folder):
@@ -27,8 +27,7 @@ def process_data_from_folder():
                 with open(os.path.join(root,file_name), 'r') as file:
                     code = file.read()
                     method_matches = re.findall(method_pattern, code)
-                    usings_matches = re.findall(usings_pattern,code)
-
+                    usings_matches = re.findall(usings_pattern,code,re.MULTILINE)
                 parent_dir = os.path.basename(os.path.dirname(file_rel_path))
                 row = [parent_dir, file_rel_path, file_name, method_matches, usings_matches]
                 write_row_to_csv(row)
