@@ -4,5 +4,5 @@ def write_row_to_csv(row):
         writer = csv.writer(f)
         writer.writerow(row)
 
-header = ['ParentFolderName','FileRelPath','FileName','MethodName']
+header = ['ParentFolderName','FileRelPath','FileName','MethodName','Usings']
 write_row_to_csv(header)

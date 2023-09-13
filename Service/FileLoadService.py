@@ -1,27 +1,11 @@
 from tkinter import filedialog as fd
 import os
 import re
-from sklearn.feature_extraction.text import CountVectorizer
 from CSVFileService import *
-
-# return an object with all the files in a given folder
-# def load_folder():
-#     return
-def process_text(text):
-    vect = CountVectorizer(max_features=10000).fit(text)
-    return vect.transform(text)
-
-def get_relpath(root,file):
-    relative_path = os.path.relpath(os.path.join(root, file))
-    return relative_path.replace("\\", "/")
-
-
-#mock: read and return a list of all file names with .cs
-#real: read and return relevant data after processing file; data should be stored in a map?
 
 
 #TODO: add filter to ignore assembly files and migrations
-
+#TODO: refactor regex for usings and method identification
 def process_data_from_folder():
     filePathName = []
     fileName = []
@@ -29,37 +13,26 @@ def process_data_from_folder():
     root_dir = os.path.basename(folder)
     exclude = set['.git','.idea','bin','obj']
     method_pattern = r'[a-zA-Z][a-zA-Z0-9]+\([a-zA-Z][a-zA-Z0-9]+\)'
+    usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
 
     for root,dirs,files in os.walk(folder):
         dirs[:] = [d for d in dirs if d not in exclude]
 
-        for file_path in files:
-            if file_path.endswith('.cs'):
-                file_rel_path = get_relpath(root_dir,file_path)
+        for file_name in files:
+            if file_name.endswith('.cs'):
+                file_rel_path = os.path.relpath(os.path.join(root, file_name), folder).replace("\\", "/")
                 filePathName.append(file_rel_path)
 
-                file_name = os.path.basename(file_path)
                 fileName.append(file_name)
 
-                with open(os.path.join(root,file_path), 'r') as file:
+                with open(os.path.join(root,file_name), 'r') as file:
                     code = file.read()
                     method_matches = re.findall(method_pattern, code)
-                    method_names = {}
-                    for method_name in method_matches:
-                        method_names[method_name] = get_relpath(root, file_path)
-                        row = [root_dir, file_rel_path, file_name, method_name]
-                        write_row_to_csv(row)
+                    usings_matches = re.findall(usings_pattern,code)
 
-    return filePathName,filePathName,method_names
+                parent_dir = os.path.basename(os.path.dirname(file_rel_path))
+                row = [parent_dir, file_rel_path, file_name, method_matches, usings_matches]
+                write_row_to_csv(row)
 
-#TODO: refactor relpath
-#gets a set of all method names + their file location
-# def get_method_name_from_folder(file_path,root):
-#
-#
-#     return method_info
+process_data_from_folder()
 
-filelist,filepathlist,filemethodlist = process_data_from_folder()
-# filelistProccessed = process_text(filelist)
-
-print(filelist)
