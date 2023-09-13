@@ -10,7 +10,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 
 def read_data():
-    df = pd.read_csv('data.csv')
+    df = pd.read_csv('..\data.csv')
     print(df.info())
+
+read_data()
+
 
 
