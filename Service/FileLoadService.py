@@ -10,7 +10,7 @@ def process_data_from_folder():
     filePathName = []
     fileName = []
     folder = fd.askdirectory()
-    exclude = set['.git','.idea','bin','obj']
+    exclude = {'.git', '.idea', 'bin', 'obj'}
     method_pattern = r'\b[A-Z]\w*(?=\s*\()'
     usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
 
