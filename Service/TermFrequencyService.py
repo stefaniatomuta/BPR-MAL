@@ -1,40 +1,28 @@
-import os
 import re
+from Helpers.RegexHelper import IF_PATTERN,FOREACH_PATTERN,FOR_PATTERN,WHILE_PATTERN
 
-if_pattern = r'if\s*\(.+?\)'
-for_pattern = r'\b(for|foreach)\s*\([^)]*\)' #also counts foreach loops as well
-while_pattern = r'while\s*\(.+?\)'
+def get_number_of_ifs_in_file(file_path):
+    with open(file_path, 'r', encoding='utf8', errors='ignore') as file:
+        code = file.read()
+        if_matches = re.findall(IF_PATTERN, code, re.MULTILINE)
+        return len(if_matches)
 
-def get_number_of_ifs(folder):
-    ifs = 0
-    for root,dirs,files in os.walk(folder):
-        for file_name in files:
-            with open(os.path.join(root, file_name), 'r',encoding='utf8',errors='ignore') as file:
-                code = file.read()
-            if file_name.endswith('.cs'):
-                if_matches = re.findall(if_pattern,code,re.MULTILINE)
-                ifs += len(if_matches)
-    return ifs
 
-def get_number_of_fors(folder):
-    fors = 0
-    for root,dirs,files in os.walk(folder):
-        for file_name in files:
-            with open(os.path.join(root, file_name), 'r',encoding='utf8',errors='ignore') as file:
-                code = file.read()
-            if file_name.endswith('.cs'):
-                for_matches = re.findall(for_pattern,code,re.MULTILINE)
-                fors += len(for_matches)
-    return fors
+def get_number_of_fors_in_file(file_path):
+    with open(file_path, 'r', encoding='utf8', errors='ignore') as file:
+        code = file.read()
+        for_matches = re.findall(FOR_PATTERN, code, re.MULTILINE)
+        return len(for_matches)
 
-def get_number_of_whiles(folder):
-    whiles = 0
-    for root,dirs,files in os.walk(folder):
-        for file_name in files:
-            with open(os.path.join(root, file_name), 'r',encoding='utf8',errors='ignore') as file:
-                code = file.read()
-            if file_name.endswith('.cs'):
-                while_matches = re.findall(while_pattern,code,re.MULTILINE)
-                whiles += len(while_matches)
-    return whiles
+def get_number_of_foreaches_in_file(file_path):
+    with open(file_path, 'r', encoding='utf8', errors='ignore') as file:
+        code = file.read()
+        foreach_matches = re.findall(FOREACH_PATTERN, code, re.MULTILINE)
+        return len(foreach_matches)
 
+
+def get_number_of_whiles_in_file(file_path):
+    with open(file_path, 'r', encoding='utf8', errors='ignore') as file:
+        code = file.read()
+        while_matches = re.findall(WHILE_PATTERN, code, re.MULTILINE)
+        return len(while_matches)

@@ -12,9 +12,20 @@ def process_data_from_folder():
     fileName = []
     folder = fd.askdirectory()
     exclude = {'.git', '.idea', 'bin', 'obj'}
-    method_pattern = r'\b[A-Z]\w*(?=\s*\()'
-    usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
-    row = [get_number_of_fors(folder),get_number_of_ifs(folder),get_number_of_whiles(folder)]
+    fors = 0
+    ifs = 0
+    whiles = 0
+    foreaches = 0
+    for root,dirs,files in os.walk(folder):
+        for file_name in files:
+            if file_name.endswith('.cs'):
+                file_path = os.path.join(root,file_name)
+                fors += get_number_of_fors_in_file(file_path)
+                ifs += get_number_of_ifs_in_file(file_path)
+                whiles += get_number_of_whiles_in_file(file_path)
+                foreaches += get_number_of_foreaches_in_file(file_path)
+
+    row = [fors,foreaches,ifs,whiles]
     write_row_to_csv(row)
     # for root,dirs,files in os.walk(folder):
     #     dirs[:] = [d for d in dirs if d not in exclude]
