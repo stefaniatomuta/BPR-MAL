@@ -1,26 +1,20 @@
 from tkinter import filedialog as fd
 import os
-import re
 from CSVFileService import *
+from TermFrequencyService import *
 from Commands.FrameworkCmd import FrameworkCommand
 from Service import FrameworksService
 
-
-#TODO: add filter to ignore assembly files and migrations
-#TODO: refactor regex for usings and method identification
 def process_data_from_folder():
-    filePathName = []
-    fileName = []
-    folder = fd.askdirectory()
-    exclude = {'.git', '.idea', 'bin', 'obj'}
-    method_pattern = r'\b[A-Z]\w*(?=\s*\()'
-    usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
-
     commands = []
     commands.append(FrameworkCommand())
-    for root,dirs,files in os.walk(folder):
-        #dirs[:] = [d for d in dirs if d not in exclude]
+    folder = fd.askdirectory()
+    fors = 0
+    ifs = 0
+    whiles = 0
+    foreaches = 0
 
+    for root,dirs,files in os.walk(folder):
         for file_name in files:
             for command in commands:
                 analysis_results = command.execute(file_name, root)
@@ -28,18 +22,14 @@ def process_data_from_folder():
                     info = FrameworksService.EOL_API(match)
                     print(info.isEndOfLife)
             if file_name.endswith('.cs'):
-                file_rel_path = os.path.relpath(os.path.join(root, file_name), folder).replace("\\", "/")
-                filePathName.append(file_rel_path)
+                file_path = os.path.join(root,file_name)
+                fors += get_number_of_fors_in_file(file_path)
+                ifs += get_number_of_ifs_in_file(file_path)
+                whiles += get_number_of_whiles_in_file(file_path)
+                foreaches += get_number_of_foreaches_in_file(file_path)
 
-                fileName.append(file_name)
-
-                with open(os.path.join(root,file_name), 'r') as file:
-                    code = file.read()
-                    method_matches = re.findall(method_pattern, code)
-                    usings_matches = re.findall(usings_pattern,code,re.MULTILINE)
-                parent_dir = os.path.basename(os.path.dirname(file_rel_path))
-                row = [parent_dir, file_rel_path, file_name, method_matches, usings_matches]
-                write_row_to_csv(row)
+    row = [fors,foreaches,ifs,whiles]
+    write_row_to_csv(row)
 
 process_data_from_folder()
 
