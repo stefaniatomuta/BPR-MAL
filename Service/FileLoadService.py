@@ -2,6 +2,8 @@ from tkinter import filedialog as fd
 import os
 import re
 from CSVFileService import *
+from Commands.FrameworkCmd import FrameworkCommand
+from Service import FrameworksService
 
 
 #TODO: add filter to ignore assembly files and migrations
@@ -14,10 +16,17 @@ def process_data_from_folder():
     method_pattern = r'\b[A-Z]\w*(?=\s*\()'
     usings_pattern = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;$'
 
+    commands = []
+    commands.append(FrameworkCommand())
     for root,dirs,files in os.walk(folder):
-        dirs[:] = [d for d in dirs if d not in exclude]
+        #dirs[:] = [d for d in dirs if d not in exclude]
 
         for file_name in files:
+            for command in commands:
+                analysis_results = command.execute(file_name, root)
+                for file, match in analysis_results.items():
+                    info = FrameworksService.EOL_API(match)
+                    print(info.isEndOfLife)
             if file_name.endswith('.cs'):
                 file_rel_path = os.path.relpath(os.path.join(root, file_name), folder).replace("\\", "/")
                 filePathName.append(file_rel_path)

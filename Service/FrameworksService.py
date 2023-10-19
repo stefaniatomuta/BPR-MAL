@@ -1,17 +1,35 @@
 import json
+import requests
+from API.eodl_models import FrameworkInfo, FrameworkDetails
 
-j = '[{"cycle": "4.8.1", "releaseDate": "2022-08-09", "eol": false, "lts": false}, {"cycle": "4.8", "releaseDate": "2019-04-18","eol": "2027-01-12","lts": false}]'
-class FrameworkDetails(object):
-    def __init__(self, cycle, releaseDate, eol, lts):
-        self.cycle = cycle
-        self.releaseDate = releaseDate
-        self.eol = eol
-        self.lts = lts
+# Service for EODL integration
+mappings = {
+    "dotnet": "net",
+    "dotnetcore": "netcoreapp",
+    "dotnetfx": "v"
+}
 
-data = json.loads(j)
-framework_details = [FrameworkDetails(fd['cycle'], fd['releaseDate'], fd['eol'], fd['lts']) for fd in data]
+def frameworks_mappings(value):
+    for key, val in mappings.items():
+        if val == value:
+            return key
+    return None
+def type_and_cycle_splitter(target_framework) -> FrameworkInfo:
+    digits = next((i for i, char in enumerate(target_framework) if char.isdigit()), len(target_framework))
+    type = target_framework[:digits]
+    cycle = target_framework[digits:]
+    type = frameworks_mappings(type)
+    return FrameworkInfo(type, cycle, None)
 
-print(framework_details[1].cycle)
-print(framework_details[1].releaseDate)
-print(framework_details[1].eol)
-print(framework_details[1].lts)
+def EOL_API(target_framwework) -> FrameworkInfo:
+    info = type_and_cycle_splitter(target_framwework)
+    url = f"https://endoflife.date/api/{info.type}/{info.cycle}.json"
+    request = requests.get(url)
+    if request.status_code == 200:
+        data = json.loads(request.text)
+        details = FrameworkDetails(data['releaseDate'], data['eol'], data['lts'])
+        info.isEndOfLife = details.end_of_life()
+        return info
+    else:
+        print(f"Request to {url} failed with status code {request.status_code}")
+
