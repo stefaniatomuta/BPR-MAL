@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from API.models import Result, Violation, Rule
 
+
 app = FastAPI()
 @app.post("/post")
 async def upload_code(item: str):
