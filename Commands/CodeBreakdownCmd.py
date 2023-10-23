@@ -1,3 +1,5 @@
+from typing import Any
+
 from Service.CodeBreakdownService import *
 from Commands.CommandModel import Command
 
@@ -8,5 +10,8 @@ class CodeLinesCommand(Command):
 
 class CommentLinesCommand(Command):
     def execute(self, file_name: str) -> int:
-        with open(file_name, 'r', encoding='utf8', errors='ignore') as file:
-            return get_comment_lines(file_name)
+        return get_comment_lines(file_name)
+
+class MethodNumberCommand(Command):
+    def execute(self, file_name: str) -> int:
+        return get_number_of_methods(file_name)
