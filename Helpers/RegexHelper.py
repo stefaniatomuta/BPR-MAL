@@ -6,3 +6,5 @@ USINGS_PATTERN = r'^using\s+[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*;
 CODELINES_PATTERN = r'^[^\n].*\S'
 COMMENTS_PATTERN = r'^[^\n]*(?:(?:\/\/[^\n]*)|(?:\/\*[\s\S]*?\*\/)|\S.*(?:\/\/[^\n]*|\/\*[\s\S]*?\*\/))'
 METHOD_PATTERN = r'\b(?:public|private|protected|internal|static|virtual|override|abstract|sealed|partial|async)?\s+\w+\s+\w+\s*\([^)]*\)\s*{[^}]*}'
+CLASS_PATTERN = r'class\s+\w+(\s*<[a-zA-Z0-9, ]+>)?'
+INTERFACE_PATTERN = r'public\s*interface\s+\w+\s*{[^}]*}'
