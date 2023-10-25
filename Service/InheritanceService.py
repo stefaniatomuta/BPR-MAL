@@ -12,7 +12,6 @@ def get_class_depths(class_matches):
             class_depths[class_name] = base_class
     return class_depths
 
-# somehow get class matches from command? or smth
 def get_max_inheritance_depth(class_matches):
     return max([calculate_depth(clas,class_matches) for clas in get_class_depths(class_matches).keys()])
 
