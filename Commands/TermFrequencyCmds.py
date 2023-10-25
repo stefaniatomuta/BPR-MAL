@@ -1,5 +1,3 @@
-import re
-from Helpers.RegexHelper import IF_PATTERN,FOREACH_PATTERN,FOR_PATTERN,WHILE_PATTERN
 from Commands.CommandModel import Command
 from Service.TermFrequencyService import *
 
