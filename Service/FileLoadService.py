@@ -6,10 +6,11 @@ from Commands.TermFrequencyCmds import *
 from Commands.CodeBreakdownCmds import *
 from Commands.InheritanceOverheadCmds import *
 from Service import FrameworksService
+from Service.InheritanceService import get_max_inheritance_depth
 
 def get_commands():
     commands = []
-    # commands.append(FrameworkCommand())
+    commands.append(FrameworkCommand())
     commands.append(ForFrequencyCommand())
     commands.append(IfFrequencyCommand())
     commands.append(ForEachFrequencyCommand())
@@ -20,11 +21,14 @@ def get_commands():
     commands.append(ClassNumberCommand())
     commands.append(InterfaceNumberCommand())
     commands.append(InheritanceDeclarationsCommand())
+    commands.append(ClassInheritanceCommand())
     return commands
+
 def process_data_from_folder():
     commands = get_commands()
     folder = fd.askdirectory()
     sums = {}
+    class_matches = []
     csfiles = 0
     for root,dirs,files in os.walk(folder):
         for file_name in files:
@@ -32,16 +36,16 @@ def process_data_from_folder():
                 csfiles+=1
             for command in commands:
                 file_path = os.path.join(root,file_name)
-                analysis_results = {}
-                analysis_results.setdefault(type(command).__name__, 0)
-                analysis_results[type(command).__name__] += command.execute(file_path)
-                # for file, match in analysis_results.items():
-                #     info = FrameworksService.EOL_API(match)
-                #     print(info.isEndOfLife)
-                for command_name, result in analysis_results.items():
-                    if(command_name != 'FrameworkCommand'):
-                        sums[str(command_name)] = sums.get(str(command_name),0)+ result
+                analysis_results = command.execute(file_path)
+                for file, match in analysis_results.items():
+                    info = FrameworksService.EOL_API(match)
+                    print(info.isEndOfLife)
+                if(isinstance(analysis_results, list)):
+                    class_matches.extend(analysis_results)
+                if(isinstance(analysis_results, int)):
+                    command_name = type(command).__name__
+                    sums[command_name] = sums.get(str(command_name),0)+ analysis_results
+    print("inheritance tree max depth: " + repr(get_max_inheritance_depth(class_matches)))
     print(sums)
-
 process_data_from_folder()
 
