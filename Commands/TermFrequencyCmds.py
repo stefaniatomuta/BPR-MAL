@@ -1,19 +1,20 @@
 from Commands.CommandModel import Command
-from Service.TermFrequencyService import *
+from Service.CodeBreakdownService import *
+from Helpers.RegexHelper import FOR_PATTERN,FOREACH_PATTERN,IF_PATTERN,WHILE_PATTERN
 
 class ForFrequencyCommand(Command):
     def execute(self, file_name: str) -> int:
-        return get_number_of_fors_in_file(file_name)
+        return get_matches_in_file(file_name,FOR_PATTERN)
 
 class ForEachFrequencyCommand(Command):
     def execute(self, file_name: str) -> int:
-        return get_number_of_foreaches_in_file(file_name)
+        return get_matches_in_file(file_name,FOREACH_PATTERN)
 
 
 class IfFrequencyCommand(Command):
     def execute(self, file_name: str) -> int:
-        return get_number_of_ifs_in_file(file_name)
+        return get_matches_in_file(file_name,IF_PATTERN)
 
 class WhileFrequencyCommand(Command):
     def execute(self, file_name: str) -> int:
-        return get_number_of_whiles_in_file(file_name)
+        return get_matches_in_file(file_name,WHILE_PATTERN)
