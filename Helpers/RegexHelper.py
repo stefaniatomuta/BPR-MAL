@@ -8,3 +8,4 @@ COMMENTS_PATTERN = r'^[^\n]*(?:(?:\/\/[^\n]*)|(?:\/\*[\s\S]*?\*\/)|\S.*(?:\/\/[^
 METHOD_PATTERN = r'\b(?:public|private|protected|internal|static|virtual|override|abstract|sealed|partial|async)?\s+\w+\s+\w+\s*\([^)]*\)\s*{[^}]*}'
 CLASS_PATTERN = r'class\s+\w+(\s*<[a-zA-Z0-9, ]+>)?'
 INTERFACE_PATTERN = r'public\s*interface\s+\w+\s*{[^}]*}'
+CLASS_COUPLING = r'\b[A-Z][A-Za-z0-9_]*(?:<[A-Za-z][A-Za-z0-9_]*>)?(?!(?:\s*\{|;|\s*\=)|\s*\.|\s*\-|\s*\?|s*\+|\s*\(|\s*\,|\s*\:|\s*\}|\s*\)|\s*\\)\b'

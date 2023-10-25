@@ -1,0 +1,21 @@
+import re
+from Service.EOLService import EOL_API
+def get_matches(file_name) -> dict:
+    patterns = [r'<TargetFramework>(.*?)</TargetFramework>', r'<TargetFrameworkVersion>(.*?)</TargetFrameworkVersion>']
+    file_matches = {}
+    if file_name.endswith('.csproj'):
+        with open(file_name, 'r') as f:
+            code = f.read()
+            for pattern in patterns:
+                matches = re.findall(pattern, code)
+                for match in matches:
+                    file_matches[file_name] = match
+    return file_matches
+
+def get_number_eod_frameworks(file_name) -> int:
+    count = []
+    for file, match in get_matches(file_name).items():
+        info = EOL_API(match)
+        if info.isEndOfLife:
+            count.append(info)
+    return len(count)
