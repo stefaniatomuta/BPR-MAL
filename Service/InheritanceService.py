@@ -13,5 +13,5 @@ def get_class_depths(class_matches):
     return class_depths
 
 def get_max_inheritance_depth(class_matches):
-    return max([calculate_depth(clas,class_matches) for clas in get_class_depths(class_matches).keys()])
+    return max([calculate_depth(clas, class_matches) for clas in get_class_depths(class_matches).keys()])
 
