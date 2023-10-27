@@ -1,7 +1,7 @@
 import re
 from Helpers.RegexHelper import *
 
-def test(file_name) -> list:
+def module_coupling(file_name) -> list:
     class_coupling_values = {}
     class_coupling_list = []
     if file_name.endswith('.cs'):

@@ -28,12 +28,6 @@ def process_data_from_folder():
     sums = {}
     dict_matches = {}
     csfiles = 0
-    # for entry in os.scandir(folder):
-    #     if entry.name == '.gitignore':
-    #         content = read_gitignore(entry.path)
-    #         print(len(content))
-    #         for lin in content:
-    #             print(lin)
 
     for root, dirs, files in os.walk(folder):
         for file_name in files:
