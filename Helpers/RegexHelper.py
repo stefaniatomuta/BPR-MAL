@@ -9,4 +9,5 @@ METHOD_PATTERN = r'\b(?:public|private|protected|internal|static|virtual|overrid
 CLASS_PATTERN = r'class (\w+)(?:\s*:\s*(\w+))?'
 INTERFACE_PATTERN = r'public\s*interface\s+\w+\s*{[^}]*}'
 INHERITANCE_PATTERN = r'\bclass\s+\w+\s*:\s*(?:\w+\s*,\s*)*\w+\b'
+APICLIENT_PATTERN = r'\bHttpClient\b\s+(\w+)(?![\w)])'
 CLASS_COUPLING = r'\b[A-Z][A-Za-z0-9_]*(?:<[A-Za-z][A-Za-z0-9_]*>)?(?!(?:\s*\{|;|\s*\=)|\s*\.|\s*\-|\s*\?|s*\+|\s*\(|\s*\,|\s*\:|\s*\}|\s*\)|\s*\\)\b'

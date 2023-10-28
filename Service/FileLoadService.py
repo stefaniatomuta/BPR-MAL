@@ -5,6 +5,7 @@ from Commands.CodeBreakdownCmds import *
 from Commands.InheritanceOverheadCmds import *
 from Helpers.GitIgnoreHelper import *
 from Commands.MetricsCmd import *
+from Commands.CallsToExternalProvidersCmds import *
 def get_commands():
     commands = []
     commands.append(MetricsCommand())
@@ -20,6 +21,7 @@ def get_commands():
     commands.append(InterfaceNumberCommand())
     commands.append(InheritanceDeclarationsCommand())
     commands.append(ClassInheritanceCommand())
+    commands.append(ExternalAPICallsCommand())
     return commands
 
 def process_data_from_folder():
