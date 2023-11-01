@@ -5,6 +5,8 @@
 from Commands.CommandModel import Command
 from Service.ExternalProviderService import *
 
+
 class ExternalAPICallsCommand(Command):
     def execute(self, file_name: str) -> int:
+        dict = get_usings_nuget_matches(file_name)
         return get_usage_of_httpclient_var(file_name)
