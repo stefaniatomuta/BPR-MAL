@@ -42,9 +42,7 @@ def is_ignored(file_name, gitignore_content):
     for pattern in gitignore_content:
         if file_name.startswith(pattern):
             return True
-        if file_name.endswith(('.dll', '.md', '.sln',
-                               '.DotSettings.user', '.css', '.js',
-                               '.xml', '.nupkg')):
+        if file_name.endswith(('.dll', '.md', '.sln', '.DotSettings.user', '.css', '.js', '.xml', '.nupkg')):
             return True
     return False
 

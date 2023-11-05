@@ -9,4 +9,6 @@ from Service.ExternalProviderService import *
 class ExternalAPICallsCommand(Command):
     def execute(self, file_name: str) -> int:
         dict = get_usings_nuget_matches(file_name)
+        for value in dict.values():
+            print(value)
         return get_usage_of_httpclient_var(file_name)
