@@ -1,11 +1,12 @@
-# number of APi calls in a file?
-# authentication calls
-# database calls -> what if they use frameworks?
-# number of 3rd party libraries -> how exactly
-from Commands.CommandModel import FilesCommand
+from Commands.CommandModel import *
 from Service.ExternalProviderService import *
 
 
 class ExternalAPICallsCommand(FilesCommand):
-    def execute(self, files: str) -> int:
-        return get_usage_of_httpclient_var(files)
+    def execute(self, files_roots: list) -> dict:
+        return get_usings_nuget_matches(files_roots)
+
+
+class HttpClientCallsCommand(FilesCommand):
+    def execute(self, file_roots: list) -> Any:
+        return get_usage_of_httpclient(file_roots)

@@ -1,29 +1,30 @@
-from Helpers.RegexHelper import APICLIENT_PATTERN
-from Service.CodeBreakdownService import get_number_of_matches_in_file, get_matches_in_file
+from Service.CodeBreakdownService import *
 from Helpers.RegexHelper import *
 import re
 
 nuget_packages = []
 
 
-def get_usage_of_httpclient_var(file_name):
-    var = get_matches_in_file(file_name, APICLIENT_PATTERN)
+def get_usage_of_httpclient(files):
     usages = 0
-    if var is not None:
-        for match in var:
-            usages += get_number_of_matches_in_file(file_name, match) - 2
+    for file_name in files:
+        matches = get_matches_in_files(file_name, APICLIENT_PATTERN)
+        if matches is not None:
+            for match in matches:
+                usages += get_number_of_matches_in_file(file_name, match) - 2
     return usages
 
 
-def get_usage_of_nuget_packages(file_name) -> list:
+def get_usage_of_nuget_packages(file_roots) -> list:
     package_matches = []
-    if file_name.endswith('.csproj'):
-        with open(file_name, 'r') as f:
-            code = f.read()
-            matches = re.findall(CSPROJ_PACKAGE_REFERENCE, code)
-            for match in matches:
-                if match not in package_matches:
-                    package_matches.append(match)
+    for file_name in file_roots:
+        if file_name.endswith('.csproj'):
+            with open(file_name, 'r', encoding='utf8', errors='ignore') as f:
+                code = f.read()
+                matches = re.findall(CSPROJ_PACKAGE_REFERENCE, code)
+                for match in matches:
+                    if match not in package_matches:
+                        package_matches.append(match)
     return package_matches
 
 
@@ -35,25 +36,24 @@ def extend_nuget_packages(nugets_per_csproj) -> list:
     return nuget_packages
 
 
-def get_all_nuget_packages(file_name):
-    if file_name.endswith('.csproj'):
-        packages = get_usage_of_nuget_packages(file_name)
-        extend_nuget_packages(packages)
+def get_all_nuget_packages(file_roots):
+    packages = get_usage_of_nuget_packages(file_roots)
+    extend_nuget_packages(packages)
 
 
-def get_usings_nuget_matches(file_name) -> dict:
+def get_usings_nuget_matches(files_roots: list) -> dict:
     nuget_matches = {}
-    get_all_nuget_packages(file_name)
+    get_all_nuget_packages(files_roots)
     for nuget in nuget_packages:
         pattern = r'using ' + nuget
-        if file_name.endswith('.cs'):
-            with open(file_name, 'r') as f:
-                code = f.read()
-                package_matches = []
-                matches = re.findall(pattern, code)
-                for match in matches:
-                    if match not in package_matches:
-                        package_matches.append(match)
-                nuget_matches[nuget] = len(package_matches)
+        usage_count = 0
+        for file_name in files_roots:
+            if file_name.endswith('.cs'):
+                with open(file_name, 'r') as f:
+                    code = f.read()
+                    matches = re.findall(pattern, code)
+                    usage_count += len(matches)
+
+            nuget_matches[nuget] = usage_count
 
     return nuget_matches

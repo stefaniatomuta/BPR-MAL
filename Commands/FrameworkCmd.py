@@ -1,9 +1,12 @@
-from Commands.CommandModel import Command
+from Commands.CommandModel import *
 import re
+
+
 # finds matches in the csproj of the target frameworks
-class FrameworkCommand(Command):
+class FrameworkCommand(FileNameCommand):
     def execute(self, file_name: str) -> dict:
-        patterns = [r'<TargetFramework>(.*?)</TargetFramework>', r'<TargetFrameworkVersion>(.*?)</TargetFrameworkVersion>']
+        patterns = [r'<TargetFramework>(.*?)</TargetFramework>',
+                    r'<TargetFrameworkVersion>(.*?)</TargetFrameworkVersion>']
         file_matches = {}
         if file_name.endswith('.csproj'):
             with open(file_name, 'r') as f:
