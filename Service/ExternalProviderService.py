@@ -1,6 +1,7 @@
 from Helpers.RegexHelper import APICLIENT_PATTERN
-from CodeBreakdownService import *
+from Service.CodeBreakdownService import get_number_of_matches_in_file, get_matches_in_file
 from Helpers.RegexHelper import *
+import re
 
 nuget_packages = []
 

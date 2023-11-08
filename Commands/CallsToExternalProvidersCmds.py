@@ -2,13 +2,10 @@
 # authentication calls
 # database calls -> what if they use frameworks?
 # number of 3rd party libraries -> how exactly
-from Commands.CommandModel import Command
+from Commands.CommandModel import FilesCommand
 from Service.ExternalProviderService import *
 
 
-class ExternalAPICallsCommand(Command):
-    def execute(self, file_name: str) -> int:
-        dict = get_usings_nuget_matches(file_name)
-        for value in dict.values():
-            print(value)
-        return get_usage_of_httpclient_var(file_name)
+class ExternalAPICallsCommand(FilesCommand):
+    def execute(self, files: str) -> int:
+        return get_usage_of_httpclient_var(files)

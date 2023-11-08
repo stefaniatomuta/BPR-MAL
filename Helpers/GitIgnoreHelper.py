@@ -1,11 +1,14 @@
-import fnmatch
-import re
+import fnmatch, re, os
 
 
 def read_gitignore() -> list:
     gitignore_content = []
     modified_lines = []
-    with open('../Config/.gitignore', 'r') as file:
+    script_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    gitignore_path = os.path.join(script_directory, 'Config', '.gitignore')
+    gitignore_path = gitignore_path.replace("\\", "/")
+
+    with open(gitignore_path, 'r') as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith('['):
