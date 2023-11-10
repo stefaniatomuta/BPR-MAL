@@ -8,7 +8,7 @@ nuget_packages = []
 def get_usage_of_httpclient(files):
     usages = 0
     for file_name in files:
-        matches = get_matches_in_files(file_name, APICLIENT_PATTERN)
+        matches = get_matches_in_file(file_name, APICLIENT_PATTERN)
         if matches is not None:
             for match in matches:
                 usages += get_number_of_matches_in_file(file_name, match) - 2

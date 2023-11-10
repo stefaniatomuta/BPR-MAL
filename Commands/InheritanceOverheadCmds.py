@@ -10,4 +10,4 @@ class InheritanceDeclarationsCommand(FileNameCommand):
 
 class ClassInheritanceCommand(FilesCommand):
     def execute(self, files: list) -> list:
-        return get_matches_in_files(files, CLASS_PATTERN)
+        return get_matches_in_file(files, CLASS_PATTERN)
