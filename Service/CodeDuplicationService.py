@@ -1,0 +1,175 @@
+import os
+import gensim
+import tempfile
+from enum import Enum
+from nltk.tokenize import word_tokenize
+from collections import OrderedDict
+
+source_code_file_extensions = ["h", "c", "cpp", "cc", "java", "py", "cs"]
+file_column_label = "File"
+file_loc_label = ",#LoC"
+similarity_column_label = "Similarity (%)"
+similarity_label_length = len(similarity_column_label)
+loc_label = "#LoC"
+similarity_label = "Similarity"
+
+class Result(Enum):
+    SUCCESS = 0
+    BAD_INPUT = 1
+    THRESHOLD_EXCEEDED = 2
+
+# """Get a list with all the source code files within the directory"""
+def get_all_source_code_from_directory(directory, file_extensions):
+    source_code_files = list()
+    for dirpath, _, filenames in os.walk(directory):
+        for name in filenames:
+            _, file_extension = os.path.splitext(name)
+            if file_extension[1:] in file_extensions:
+                filename = os.path.join(dirpath, name)
+                source_code_files.append(filename)
+
+    return source_code_files
+
+#lines of code count
+def get_loc_count(file_path):
+    lines_count = -1
+    try:
+        with open(os.path.normpath(file_path), 'r') as the_file:
+            lines_count = len(the_file.readlines())
+    except Exception as err:
+        print(f"WARNING: Failed to get lines count for file {file_path}, reason: {str(err)}")
+    return lines_count
+
+def get_loc_to_print(loc_count):
+    loc_to_print = str(loc_count) if loc_count >= 0 else ""
+    return loc_to_print
+def get_proj_root_dir(project_root_dir):
+    if project_root_dir:
+        if not os.path.isdir(project_root_dir):
+            print(
+                "The project root directory does not exist or is not a directory:",
+                project_root_dir,
+            )
+            return (Result.BAD_INPUT, {})
+        project_root_dir = os.path.abspath(project_root_dir)
+        project_root_dir = os.path.join(project_root_dir, "")
+    return project_root_dir
+
+def parse_source_code(source_code_files):
+    source_code = OrderedDict()
+    for source_code_file in source_code_files:
+        try:
+            # read file but also recover from encoding errors in source files
+            with open(source_code_file, "r", errors="surrogateescape") as f:
+                # Store source code with the file path as the key
+                content = f.read()
+                source_code[source_code_file] = content
+            return source_code
+        except Exception as err:
+            print(f"ERROR: Failed to open file {source_code_file}, reason: {str(err)}")
+
+
+#refactor this to used Gitfileservice?
+def get_source_code_files(directories,files,ignore_directories,ignore_files,file_extensions):
+    source_code_files = list()
+    files_to_ignore = list()
+    if directories:
+        for directory in directories:
+            if not os.path.isdir(directory):
+                print("Path does not exist or is not a directory:", directory)
+                return (Result.BAD_INPUT, {})
+            source_code_files += get_all_source_code_from_directory(
+                directory, file_extensions
+            )
+        for directory in ignore_directories:
+            files_to_ignore += get_all_source_code_from_directory(
+                directory, file_extensions
+            )
+    else:
+        if len(files) < 2:
+            print("Too few files to compare, you need to supply at least 2")
+            return (Result.BAD_INPUT, {})
+        for supplied_file in files:
+            if not os.path.isfile(supplied_file):
+                print("Supplied file does not exist:", supplied_file)
+                return (Result.BAD_INPUT, {})
+        source_code_files = files
+
+    files_to_ignore += ignore_files if ignore_files else list()
+    files_to_ignore = [os.path.normpath(f) for f in files_to_ignore]
+    source_code_files = [os.path.normpath(f) for f in source_code_files]
+    source_code_files = list(set(source_code_files) - set(files_to_ignore))
+    if len(source_code_files) < 2:
+        print("Not enough source code files found")
+        return (Result.BAD_INPUT, {})
+    # Sort the sources, so the results are sorted too and are reproducible
+    source_code_files.sort()
+    source_code_files = [os.path.abspath(f) for f in source_code_files]
+    return source_code_files
+
+#'''This should be the end result'''
+def get_code_similarity(fail_threshold, directory,show_loc, ignore_threshold):
+    source_code_files = list()
+    proj_root_dir = get_proj_root_dir(directory)
+    source_code = parse_source_code(source_code_files)
+    # Create a Similarity object of all the source code
+    gen_docs = [
+        [word.lower() for word in word_tokenize(source_code[source_file])]
+        for source_file in source_code
+    ]
+    dictionary = gensim.corpora.Dictionary(gen_docs)
+    corpus = [dictionary.doc2bow(gen_doc) for gen_doc in gen_docs]
+    tf_idf = gensim.models.TfidfModel(corpus)
+    sims = gensim.similarities.Similarity(tempfile.gettempdir() + os.sep, tf_idf[corpus], num_features=len(dictionary))
+
+    code_similarity = dict()
+    for source_file in source_code:
+        # Check for similarities
+        query_doc = [w.lower() for w in word_tokenize(source_code[source_file])]
+        query_doc_bow = dictionary.doc2bow(query_doc)
+        query_doc_tf_idf = tf_idf[query_doc_bow]
+
+        loc_info = ""
+        source_file_loc = -1
+        if show_loc:
+            source_file_loc = get_loc_count(source_file)
+            loc_info = "," + get_loc_to_print(source_file_loc)
+        short_source_file_path = source_file.replace(proj_root_dir, "")
+
+        empty_length = 0
+        code_similarity[short_source_file_path] = dict()
+        if show_loc:
+            code_similarity[short_source_file_path][loc_label] = source_file_loc
+            empty_length = len(code_similarity[short_source_file_path])
+        for similarity, source in zip(sims[query_doc_tf_idf], source_code):
+            # Ignore similarities for the same file
+            if source == source_file:
+                continue
+            similarity_percentage = similarity * 100
+            # Ignore very low similarity
+            if similarity_percentage < ignore_threshold:
+                continue
+            short_source_path = source.replace(proj_root_dir, "")
+            if show_loc:
+                code_similarity[short_source_file_path][short_source_path] = dict()
+                code_similarity[short_source_file_path][short_source_path][loc_label] = get_loc_count(
+                    source
+                )
+                code_similarity[short_source_file_path][short_source_path][similarity_label] = round(
+                    similarity_percentage, 2
+                )
+            else:
+                code_similarity[short_source_file_path][short_source_path] = round(
+                    similarity_percentage, 2
+                )
+            if similarity_percentage > fail_threshold:
+                exit_code = Result.THRESHOLD_EXCEEDED
+            info_to_print = short_source_path
+            if show_loc:
+                info_to_print += "," + get_loc_to_print(get_loc_count(source))
+        # If no similarities found for the particular file, remove it from the report
+        if len(code_similarity[short_source_file_path]) == empty_length:
+            del code_similarity[short_source_file_path]
+    return code_similarity
+
+
