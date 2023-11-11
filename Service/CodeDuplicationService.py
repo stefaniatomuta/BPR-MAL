@@ -69,34 +69,10 @@ def parse_source_code(source_code_files):
             print(f"ERROR: Failed to open file {source_code_file}, reason: {str(err)}")
 
 
-#refactor this to used Gitfileservice?
-def get_source_code_files(directories,files,ignore_directories,ignore_files,file_extensions):
+def get_source_code_files(directory, file_extensions):
     source_code_files = list()
     files_to_ignore = list()
-    if directories:
-        for directory in directories:
-            if not os.path.isdir(directory):
-                print("Path does not exist or is not a directory:", directory)
-                return (Result.BAD_INPUT, {})
-            source_code_files += get_all_source_code_from_directory(
-                directory, file_extensions
-            )
-        for directory in ignore_directories:
-            files_to_ignore += get_all_source_code_from_directory(
-                directory, file_extensions
-            )
-    else:
-        if len(files) < 2:
-            print("Too few files to compare, you need to supply at least 2")
-            return (Result.BAD_INPUT, {})
-        for supplied_file in files:
-            if not os.path.isfile(supplied_file):
-                print("Supplied file does not exist:", supplied_file)
-                return (Result.BAD_INPUT, {})
-        source_code_files = files
-
-    files_to_ignore += ignore_files if ignore_files else list()
-    files_to_ignore = [os.path.normpath(f) for f in files_to_ignore]
+    source_code_files += get_all_source_code_from_directory(directory, file_extensions)
     source_code_files = [os.path.normpath(f) for f in source_code_files]
     source_code_files = list(set(source_code_files) - set(files_to_ignore))
     if len(source_code_files) < 2:
@@ -109,7 +85,7 @@ def get_source_code_files(directories,files,ignore_directories,ignore_files,file
 
 #'''This should be the end result'''
 def get_code_similarity(fail_threshold, directory,show_loc, ignore_threshold):
-    source_code_files = list()
+    source_code_files = get_source_code_files(directory,'cs')
     proj_root_dir = get_proj_root_dir(directory)
     source_code = parse_source_code(source_code_files)
     # Create a Similarity object of all the source code
