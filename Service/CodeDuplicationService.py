@@ -64,9 +64,10 @@ def parse_source_code(source_code_files):
                 # Store source code with the file path as the key
                 content = f.read()
                 source_code[source_code_file] = content
-            return source_code
         except Exception as err:
             print(f"ERROR: Failed to open file {source_code_file}, reason: {str(err)}")
+    return source_code
+
 
 
 def get_source_code_files(directory, file_extensions):
@@ -83,7 +84,6 @@ def get_source_code_files(directory, file_extensions):
     source_code_files = [os.path.abspath(f) for f in source_code_files]
     return source_code_files
 
-#'''This should be the end result'''
 def get_code_similarity(fail_threshold, directory,show_loc, ignore_threshold):
     source_code_files = get_source_code_files(directory,'cs')
     proj_root_dir = get_proj_root_dir(directory)
