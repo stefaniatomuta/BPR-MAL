@@ -1,11 +1,16 @@
 from fastapi import FastAPI
-from API.models import Result, Violation, Rule
-
+from pydantic import BaseModel, constr, Field
+from Service.FileLoadService import process_data_from_folder
 
 app = FastAPI()
-@app.post("/post")
-async def upload_code(item: str):
-    rule = Rule("Dependency","Wrong dependency", True)
-    violation = Violation("Violation 1", "Wrong dependencies", "Medium", "Architecture", "public static...", rule)
-    result = Result(0.2,[violation])
-    return {"result": result}
+
+
+class RequestBody(BaseModel):
+    path: constr(min_length=1, strip_whitespace=True)
+    rules: list[str] = Field(min_length=1)
+
+
+@app.post("/upload_code")
+async def upload_code(body: RequestBody):
+    process_data_from_folder(body.path, body.rules)
+    return

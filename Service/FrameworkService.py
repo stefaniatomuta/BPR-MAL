@@ -1,7 +1,11 @@
 import re
+
+from Helpers.RegexHelper import *
 from Service.EOLService import EOL_API
+
+
 def get_matches(file_name) -> dict:
-    patterns = [r'<TargetFramework>(.*?)</TargetFramework>', r'<TargetFrameworkVersion>(.*?)</TargetFrameworkVersion>']
+    patterns = [TARGET_FRAMEWORK, TARGET_FRAMEWORK_VERSION]
     file_matches = {}
     if file_name.endswith('.csproj'):
         with open(file_name, 'r') as f:
@@ -11,6 +15,7 @@ def get_matches(file_name) -> dict:
                 for match in matches:
                     file_matches[file_name] = match
     return file_matches
+
 
 def get_number_eod_frameworks(file_name) -> int:
     count = []
