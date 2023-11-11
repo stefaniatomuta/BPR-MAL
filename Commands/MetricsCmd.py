@@ -2,6 +2,6 @@ from Commands.CommandModel import *
 from Service.ModuleCouplingService import *
 
 
-class MetricsCommand(FileNameCommand):
+class ClassCouplingCommand(FileNameCommand):
     def execute(self, file_name: str) -> list:
-        return module_coupling(file_name)
+        return class_coupling(file_name)

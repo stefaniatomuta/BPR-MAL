@@ -1,16 +1,19 @@
-from Commands.FrameworkCmd import *
-from Commands.TermFrequencyCmds import *
-from Commands.CodeBreakdownCmds import *
-from Commands.InheritanceOverheadCmds import *
-from Helpers.GitIgnoreHelper import *
-from Commands.MetricsCmd import *
-from Commands.CallsToExternalProvidersCmds import *
 import os
+import uuid
 
-commands = [MetricsCommand(), FrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
+from Commands.CallsToExternalProvidersCmds import *
+from Commands.CodeBreakdownCmds import *
+from Commands.FrameworkCmd import *
+from Commands.InheritanceOverheadCmds import *
+from Commands.MetricsCmd import *
+from Commands.TermFrequencyCmds import *
+from Helpers.GitIgnoreHelper import *
+from Service.CSVFileService import *
+
+commands = [ClassCouplingCommand(), FrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            ClassInheritanceCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand()]
+            ClassInheritanceCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), UsingsNumberCommand()]
 
 
 def dispatch_command_matches(rules):
@@ -31,14 +34,17 @@ def process_data_from_folder(folder_path, rules):
     gitignore_content = read_gitignore()
     extracted_files = []
     files_roots = []
+    sums['Project_ID'] = uuid.uuid4()
     for root, dirs, files in os.walk(folder_path):
         dirs[:] = [d for d in dirs if not should_ignore_dir(d, gitignore_content)]
         for file_name in files:
             files_roots.append(os.path.join(root, file_name))
         extracted_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content)])
 
+    # for file in extracted_files:
+    #     print(f'{file}')
     for command in processed_commands:
-        command_name = type(command).__name__
+        command_name = type(command).__name__.rstrip("Command")
         if isinstance(command, FilesCommand):
             analysis_results = command.execute(files_roots)
             sums[command_name] = analysis_results
@@ -55,7 +61,16 @@ def process_data_from_folder(folder_path, rules):
                     sums[command_name] = sums.get(str(command_name), 0) + analysis_results
 
     print(sums)
+    # write_columns_to_csv(commands)
+    write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:/Users/user/Desktop/BPR-FE",
-                         rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls", "HttpClientCalls"])
+process_data_from_folder(folder_path=r"C:/Users/tomut/Desktop/BPR-FE",
+                         rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
+                                "HttpClientCalls", "CodeLines", "CommentLines",
+                                "MethodNumber", "UsingsNumber", "Framework",
+                                "ClassCoupling", "ForFrequency", "ForEachFrequency",
+                                "IfFrequency", "WhileFrequency"])
+
+# process_data_from_folder(folder_path=r"C:/Users/tomut/Desktop/BPR-FE",
+#                          rules=["ClassCoupling"])
