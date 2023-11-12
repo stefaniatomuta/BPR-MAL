@@ -1,4 +1,3 @@
-import os
 import uuid
 
 from Commands.CallsToExternalProvidersCmds import *
@@ -10,17 +9,18 @@ from Commands.TermFrequencyCmds import *
 from Helpers.GitIgnoreHelper import *
 from Service.CSVFileService import *
 
-commands = [ClassCouplingCommand(), FrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
+commands = [ClassCouplingCommand(), EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            ClassInheritanceCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), UsingsNumberCommand()]
+            ClassInheritanceCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), UsingsNumberCommand(),
+            ClassCouplingListingCommand()]
 
 
 def dispatch_command_matches(rules):
     matched_commands = []
     for rule in rules:
         for command in commands:
-            if rule.lower() in command.__class__.__name__.lower().rstrip("command"):
+            if rule.lower() in command.__class__.__name__.lower():
                 if command not in matched_commands:
                     matched_commands.append(command)
 
@@ -41,8 +41,6 @@ def process_data_from_folder(folder_path, rules):
             files_roots.append(os.path.join(root, file_name))
         extracted_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content)])
 
-    # for file in extracted_files:
-    #     print(f'{file}')
     for command in processed_commands:
         command_name = type(command).__name__.rstrip("Command")
         if isinstance(command, FilesCommand):
@@ -62,15 +60,12 @@ def process_data_from_folder(folder_path, rules):
 
     print(sums)
     # write_columns_to_csv(commands)
-    write_to_csv(sums)
+    # write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:/Users/tomut/Desktop/BPR-FE",
+process_data_from_folder(folder_path=r"C:/Users/user/Desktop/BPR-FE",
                          rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
-                                "MethodNumber", "UsingsNumber", "Framework",
-                                "ClassCoupling", "ForFrequency", "ForEachFrequency",
-                                "IfFrequency", "WhileFrequency"])
-
-# process_data_from_folder(folder_path=r"C:/Users/tomut/Desktop/BPR-FE",
-#                          rules=["ClassCoupling"])
+                                "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
+                                "ForFrequency", "ForEachFrequency",
+                                "IfFrequency", "WhileFrequency", "ClassCouplingListing"])
