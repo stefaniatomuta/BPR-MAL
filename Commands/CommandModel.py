@@ -12,3 +12,8 @@ class FileNameCommand(abc.ABC):
 class FilesCommand(abc.ABC):
     def execute(self, file_roots: list) -> Any:
         pass
+
+
+class FolderCommand(abc.ABC):
+    def execute(self, folder_path:str) -> Any:
+        pass
