@@ -10,6 +10,6 @@ class InheritanceDeclarationsCommand(FileNameCommand):
 
 
 class InheritanceDepthCommand(FilesCommand):
-    def execute(self, files: list) -> list:
+    def execute(self, files: list) -> int:
         matches = get_matches_in_files(files, CLASS_PATTERN)
         return get_max_inheritance_depth(matches)
