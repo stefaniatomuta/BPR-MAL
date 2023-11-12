@@ -65,9 +65,9 @@ def process_data_from_folder(folder_path, rules):
     # write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:/Users/user/Desktop/BPR-FE",
+process_data_from_folder(folder_path=r"C:\Users\users\Desktop\UNI\Semester 7\BPR\BPR-FE",
                          rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
                                 "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
                                 "ForFrequency", "ForEachFrequency",
-                                "IfFrequency", "WhileFrequency", "ClassCouplingListing"])
+                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth"])
