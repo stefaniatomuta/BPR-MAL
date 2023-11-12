@@ -35,6 +35,6 @@ class UsingsNumberCommand(FileNameCommand):
         return get_number_of_matches_in_file(file_name, USINGS_PATTERN)
 
 
-class CodeDuplicationMatrixCommand(FolderCommand):
+class CodeDuplicationCommand(FolderCommand):
     def execute(self, folder_path: str) -> list:
-        return get_code_similarity_matrix(folder_path)
+        return get_code_similarity_values(folder_path)

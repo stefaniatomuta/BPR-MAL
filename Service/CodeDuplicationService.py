@@ -1,18 +1,14 @@
 import os
 import gensim
 import tempfile
-from enum import Enum
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
-import numpy as np
 
 source_code_file_extensions = ["h", "c", "cpp", "cc", "java", "py", "cs"]
 file_column_label = "File"
 file_loc_label = ",#LoC"
 similarity_column_label = "Similarity (%)"
 similarity_label_length = len(similarity_column_label)
-loc_label = "#LoC"
-similarity_label = "Similarity"
 fail_threshold = 100
 ignore_threshold = 0
 
@@ -121,13 +117,7 @@ def get_code_similarity(directory):
     return code_similarity
 
 
-def get_code_similarity_matrix(folder_path):
+def get_code_similarity_values(folder_path):
     code_similarity = get_code_similarity(folder_path)
     all_values = [value for sub_dict in code_similarity.values() for value in sub_dict.values()]
-    num_items = len(code_similarity)
-    matrix = np.zeros((num_items, num_items), dtype=int)
-    for i in range(num_items):
-        for j in range(num_items):
-            if i != j:
-                matrix[i, j] = all_values.pop(0)
-    return matrix
+    return all_values
