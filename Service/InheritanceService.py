@@ -7,7 +7,7 @@ def calculate_depth(class_name,class_matches):
 def get_class_depths(class_matches):
     class_depths = {}
     for class_match in class_matches:
-        class_name, base_class = class_match
+        class_name, base_class = class_match[0]
         if base_class:
             class_depths[class_name] = base_class
     return class_depths

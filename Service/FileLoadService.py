@@ -1,19 +1,18 @@
 import uuid
-
-from Commands.CallsToExternalProvidersCmds import *
 from Commands.CodeBreakdownCmds import *
 from Commands.FrameworkCmd import *
 from Commands.InheritanceOverheadCmds import *
 from Commands.MetricsCmd import *
 from Commands.TermFrequencyCmds import *
 from Helpers.GitIgnoreHelper import *
-from Service.CSVFileService import *
+from Commands.CallsToExternalProvidersCmds import *
+import os
 
-commands = [ClassCouplingCommand(), EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
+commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            ClassInheritanceCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), UsingsNumberCommand(),
-            ClassCouplingListingCommand()]
+            InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeDuplicationCommand(),
+            UsingsNumberCommand(), ClassCouplingListingCommand()]
 
 
 def dispatch_command_matches(rules):
@@ -43,13 +42,16 @@ def process_data_from_folder(folder_path, rules):
 
     for command in processed_commands:
         command_name = type(command).__name__.rstrip("Command")
+        if isinstance(command, FolderCommand):
+            analysis_results = command.execute(folder_path)
+            sums[command_name] = analysis_results
         if isinstance(command, FilesCommand):
             analysis_results = command.execute(files_roots)
             sums[command_name] = analysis_results
         if isinstance(command, FileNameCommand):
             for file_name in files_roots:
                 analysis_results = command.execute(file_name)
-                if (isinstance(analysis_results, list)):
+                if isinstance(analysis_results, list):
                     if len(analysis_results) != 0:
                         if command_name not in dict_matches:
                             dict_matches[command_name] = []
@@ -63,9 +65,9 @@ def process_data_from_folder(folder_path, rules):
     # write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:/Users/user/Desktop/BPR-FE",
+process_data_from_folder(folder_path=r"C:\Users\users\Desktop\UNI\Semester 7\BPR\BPR-FE",
                          rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
                                 "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
                                 "ForFrequency", "ForEachFrequency",
-                                "IfFrequency", "WhileFrequency", "ClassCouplingListing"])
+                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth"])

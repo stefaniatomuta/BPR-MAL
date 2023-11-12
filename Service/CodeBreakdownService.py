@@ -17,3 +17,14 @@ def get_matches_in_file(file_name, pattern):
             code = file.read()
             matches = re.findall(pattern, code, re.MULTILINE)
             return matches
+        else:
+            return None
+
+
+def get_matches_in_files(files, pattern):
+    matches = [get_matches_in_file(file,pattern) for file in files]
+    filteredList = []
+    for item in matches:
+        if item:
+            filteredList.append(item)
+    return filteredList
