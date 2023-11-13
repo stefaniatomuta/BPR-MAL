@@ -6,6 +6,7 @@ from Commands.MetricsCmd import *
 from Commands.TermFrequencyCmds import *
 from Helpers.GitIgnoreHelper import *
 from Commands.CallsToExternalProvidersCmds import *
+from Service.CSVFileService import *
 import os
 
 commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
@@ -62,12 +63,12 @@ def process_data_from_folder(folder_path, rules):
 
     print(sums)
     # write_columns_to_csv(commands)
-    # write_to_csv(sums)
+    write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:\Users\users\Desktop\UNI\Semester 7\BPR\BPR-FE",
+process_data_from_folder(folder_path=r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\MAL Repos\Shop-Management-System",
                          rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
                                 "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
-                                "ForFrequency", "ForEachFrequency",
+                                "ForFrequency", "ForEachFrequency","InheritanceDeclarations",
                                 "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth"])

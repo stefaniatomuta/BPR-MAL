@@ -11,7 +11,6 @@ def write_to_csv(command_dictionary, csv_path='../Data/data.csv'):
     columns = read_columns(csv_path)
     row = [''] * len(columns)
     for key, value in command_dictionary.items():
-
         if key in columns:
             column_index = columns.index(key)
             row[column_index] = value

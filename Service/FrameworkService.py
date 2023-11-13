@@ -8,7 +8,7 @@ def get_matches(file_name) -> dict:
     patterns = [TARGET_FRAMEWORK, TARGET_FRAMEWORK_VERSION]
     file_matches = {}
     if file_name.endswith('.csproj'):
-        with open(file_name, 'r') as f:
+        with open(file_name, 'r', encoding='utf8') as f:
             code = f.read()
             for pattern in patterns:
                 matches = re.findall(pattern, code)

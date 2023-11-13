@@ -3,7 +3,7 @@ import gensim
 import tempfile
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
-
+import numpy as np
 source_code_file_extensions = ["h", "c", "cpp", "cc", "java", "py", "cs"]
 file_column_label = "File"
 file_loc_label = ",#LoC"
@@ -120,4 +120,4 @@ def get_code_similarity(directory):
 def get_code_similarity_values(folder_path):
     code_similarity = get_code_similarity(folder_path)
     all_values = [value for sub_dict in code_similarity.values() for value in sub_dict.values()]
-    return all_values
+    return list(dict.fromkeys(all_values))
