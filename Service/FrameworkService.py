@@ -21,6 +21,7 @@ def get_number_eod_frameworks(file_name) -> int:
     count = []
     for file, match in get_matches(file_name).items():
         info = EOL_API(match)
-        if info.isEndOfLife:
-            count.append(info)
+        if info:
+            if info.isEndOfLife:
+                count.append(info)
     return len(count)

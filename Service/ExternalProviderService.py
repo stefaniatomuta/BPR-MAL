@@ -49,7 +49,7 @@ def get_usings_nuget_matches(files_roots: list) -> dict:
         usage_count = 0
         for file_name in files_roots:
             if file_name.endswith('.cs'):
-                with open(file_name, 'r',encoding='utf8') as f:
+                with open(file_name, 'r',encoding='utf8',errors='ignore') as f:
                     code = f.read()
                     matches = re.findall(pattern, code)
                     usage_count += len(matches)

@@ -24,7 +24,7 @@ def class_coupling_listing(files) -> list:
     class_coupling_list = []
     for file_name in files:
         if file_name.endswith('.cs'):
-            with open(file_name, 'r',encoding='utf8') as f:
+            with open(file_name, 'r',encoding='utf8',errors='ignore') as f:
                 code = f.read()
                 class_name = r'class (\w+)?'
                 class_match = re.findall(class_name, code)
