@@ -66,9 +66,10 @@ def process_data_from_folder(folder_path, rules):
     write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\MAL Repos\maui\src",
+process_data_from_folder(folder_path=r"C:\Users\tomut\Desktop\lively",
                          rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
                                 "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
-                                "ForFrequency", "ForEachFrequency","InheritanceDeclarations",
-                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth"])
+                                "ForFrequency", "ForEachFrequency", "InheritanceDeclarations",
+                                "IfFrequency", "WhileFrequency", "ClassCouplingListing", "CodeDuplication",
+                                "InheritanceDepth"])
