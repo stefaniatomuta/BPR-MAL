@@ -76,7 +76,8 @@ rules =["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "ForFrequency", "ForEachFrequency", "InheritanceDeclarations",
                                 "IfFrequency", "WhileFrequency", "ClassCouplingListing", "CodeDuplication",
                                 "InheritanceDepth"]
-def process_in_bulk(folder_path):
+
+def process_in_bulk(folder_path) :
     all_items = os.listdir(folder_path)
     for item in all_items:
         if os.path.isdir(os.path.join(folder_path, item)):
