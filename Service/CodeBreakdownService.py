@@ -34,6 +34,4 @@ def get_match_with_file(file_name, pattern) -> dict:
         if file_name.endswith('.cs'):
             code = file.read()
             matches = re.findall(pattern, code, re.MULTILINE)
-            result_dict = {file_name: len(matches)}
-            return result_dict
-            # return {file_name: len(matches)}
+            return {file_name: len(matches)}

@@ -42,3 +42,7 @@ class CodeDuplicationCommand(FolderCommand):
 class CodeLinesPerFileCommand(FileNameCommand):
     def execute(self, file_name: str) -> dict:
         return get_match_with_file(file_name, CODELINES_PATTERN)
+
+class CommentLinesPerFileCommand(FileNameCommand):
+    def execute(self, file_name: str) -> dict:
+        return get_match_with_file(file_name, COMMENTS_PATTERN)

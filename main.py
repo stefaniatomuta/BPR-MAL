@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, constr, Field
-from Service.FileLoadService import process_data_from_folder
+from Service.ExtractionService import process_data_from_folder
 
 app = FastAPI()
 
