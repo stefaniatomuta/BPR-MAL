@@ -38,3 +38,7 @@ class UsingsNumberCommand(FileNameCommand):
 class CodeDuplicationCommand(FolderCommand):
     def execute(self, folder_path: str) -> list:
         return get_code_similarity_values(folder_path)
+
+class CodeLinesPerFileCommand(FileNameCommand):
+    def execute(self, file_name: str) -> dict:
+        return get_match_with_file(file_name, CODELINES_PATTERN)

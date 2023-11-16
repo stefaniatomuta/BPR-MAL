@@ -12,7 +12,7 @@ commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyComma
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
             InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeDuplicationCommand(),
-            UsingsNumberCommand(), ClassCouplingListingCommand()]
+            UsingsNumberCommand(), ClassCouplingListingCommand(),CodeLinesPerFileCommand()]
 
 
 def dispatch_command_matches(rules):
@@ -29,7 +29,6 @@ def dispatch_command_matches(rules):
 def process_data_from_folder(folder_path, rules):
     processed_commands = dispatch_command_matches(rules)
     sums = {}
-    dict_matches = {}
     gitignore_content = read_gitignore()
     extracted_files = []
     files_roots = []
@@ -51,11 +50,11 @@ def process_data_from_folder(folder_path, rules):
         if isinstance(command, FileNameCommand):
             for file_name in files_roots:
                 analysis_results = command.execute(file_name)
-                if isinstance(analysis_results, list):
+                if isinstance(analysis_results, list) or isinstance(analysis_results, dict):
                     if len(analysis_results) != 0:
-                        if command_name not in dict_matches:
-                            dict_matches[command_name] = []
-                        dict_matches[command_name].extend(analysis_results)
+                        if command_name not in sums:
+                            sums[command_name] = []
+                        sums[command_name].append(analysis_results)
 
                 if (isinstance(analysis_results, int)):
                     sums[command_name] = sums.get(str(command_name), 0) + analysis_results
@@ -65,9 +64,10 @@ def process_data_from_folder(folder_path, rules):
     # write_to_csv(sums)
 
 
-process_data_from_folder(folder_path=r"C:\Users\users\Desktop\UNI\Semester 7\BPR\BPR-FE",
-                         rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
+
+process_data_from_folder(folder_path=r"C:\Users\adria\Desktop\UNI\Sep\Sep3_Main\SEP3\csharp",
+rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
                                 "HttpClientCalls", "CodeLines", "CommentLines",
                                 "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
                                 "ForFrequency", "ForEachFrequency",
-                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth"])
+                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth","CodeLinesPerFile"])

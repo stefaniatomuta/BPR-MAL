@@ -28,3 +28,12 @@ def get_matches_in_files(files, pattern):
         if item:
             filteredList.append(item)
     return filteredList
+
+def get_match_with_file(file_name, pattern) -> dict:
+    with open(file_name, 'r', encoding='utf8', errors='ignore') as file:
+        if file_name.endswith('.cs'):
+            code = file.read()
+            matches = re.findall(pattern, code, re.MULTILINE)
+            result_dict = {file_name: len(matches)}
+            return result_dict
+            # return {file_name: len(matches)}
