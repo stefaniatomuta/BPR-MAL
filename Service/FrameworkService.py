@@ -13,7 +13,8 @@ def get_matches(file_name) -> dict:
             for pattern in patterns:
                 matches = re.findall(pattern, code)
                 for match in matches:
-                    file_matches[file_name] = match
+                    info = EOL_API(match)
+                    file_matches[file_name] = {'version': match, 'status': info.isEndOfLife}
     return file_matches
 
 

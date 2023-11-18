@@ -10,10 +10,11 @@ def process_request(folder_path, request_rules):
     return res
     # write_result(extraction_result, all_rules)
 
+
 def automate_data_insertion(root_folder):
     for folder in os.listdir(root_folder):
-        folder_path = os.path.join(root_folder,folder)
+        folder_path = os.path.join(root_folder, folder)
         extraction_result, all_rules = process_data_from_folder(folder_path)
-        write_result(extraction_result,all_rules)
+        write_result(extraction_result, all_rules)
 
-automate_data_insertion(r"your path here")
+# automate_data_insertion(r"your path here")
