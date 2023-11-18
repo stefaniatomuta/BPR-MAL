@@ -11,23 +11,14 @@ import os
 commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeDuplicationCommand(),
-            UsingsNumberCommand(), ClassCouplingListingCommand(),CodeLinesPerFileCommand(),CommentLinesPerFileCommand()]
+            InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeSimilarityCommand(),
+            UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(), CommentLinesPerFileCommand()]
 
+def get_rules(commands) -> list:
+    return [type(command).__name__.rstrip("Command") for command in commands]
 
-def dispatch_command_matches(rules):
-    matched_commands = []
-    for rule in rules:
-        for command in commands:
-            if rule.lower() in command.__class__.__name__.lower():
-                if command not in matched_commands:
-                    matched_commands.append(command)
-
-    return matched_commands
-
-
-def process_data_from_folder(folder_path, rules) -> {}:
-    processed_commands = dispatch_command_matches(rules)
+def process_data_from_folder(folder_path) -> ({},[]):
+    rules = get_rules(commands)
     sums = {}
     gitignore_content = read_gitignore()
     extracted_files = []
@@ -39,7 +30,7 @@ def process_data_from_folder(folder_path, rules) -> {}:
             files_roots.append(os.path.join(root, file_name))
         extracted_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content)])
 
-    for command in processed_commands:
+    for command in commands:
         command_name = type(command).__name__.rstrip("Command")
         if isinstance(command, FolderCommand):
             analysis_results = command.execute(folder_path)
@@ -59,16 +50,4 @@ def process_data_from_folder(folder_path, rules) -> {}:
                 if (isinstance(analysis_results, int)):
                     sums[command_name] = sums.get(str(command_name), 0) + analysis_results
 
-    print(sums)
-    return sums
-    # write_columns_to_csv(commands)
-    # write_to_csv(sums)
-
-
-
-process_data_from_folder(folder_path=r"C:\Users\adria\Desktop\UNI\Sep\Sep3_Main\SEP3\csharp",
-rules=["ClassNumber", "InterfaceNumber", "ExternalAPICalls",
-                                "HttpClientCalls", "CodeLines", "CommentLines",
-                                "MethodNumber", "UsingsNumber", "EndOfLifeFramework",
-                                "ForFrequency", "ForEachFrequency",
-                                "IfFrequency", "WhileFrequency", "ClassCouplingListing","CodeDuplication","InheritanceDepth","CodeLinesPerFile","CommentLinesPerFile"])
+    return sums,rules

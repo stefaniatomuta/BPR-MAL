@@ -28,7 +28,7 @@ def read_columns(csv_path):
 def write_columns_to_csv(commands):
     with open('../Data/data.csv', 'a', newline='') as f:
         writer = csv.writer(f)
-        commands = [command.__class__.__name__.rstrip("Command") for command in commands]
+        # commands = [command.__class__.__name__.rstrip("Command") for command in commands]
         headers = ['Project_ID']
         headers.extend(command for command in commands)
         writer.writerow(headers)
