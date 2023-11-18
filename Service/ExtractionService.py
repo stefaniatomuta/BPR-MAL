@@ -20,7 +20,7 @@ def process_data_from_folder(folder_path) -> ({}, []):
         dirs[:] = [d for d in dirs if not should_ignore_dir(d, gitignore_content)]
         for file_name in files:
             files_roots.append(os.path.join(root, file_name))
-        extracted_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content)])
+        extracted_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content) and file not in extracted_files])
 
     for command in commands:
         command_name = type(command).__name__.rstrip("Command")
