@@ -117,7 +117,6 @@ def get_code_similarity(directory):
     return code_similarity
 
 
-def get_code_similarity_values(folder_path):
-    code_similarity = get_code_similarity(folder_path)
+def get_code_similarity_values(code_similarity):
     all_values = [value for sub_dict in code_similarity.values() for value in sub_dict.values()]
     return all_values
