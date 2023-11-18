@@ -13,4 +13,6 @@ def automate_data_insertion(root_folder):
         extraction_result, all_rules = process_data_from_folder(folder_path)
         write_result(extraction_result,all_rules)
 
-automate_data_insertion(r"your path here")
+# automate_data_insertion(r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\Test")
+
+process_request(r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\BPR-FE",[])

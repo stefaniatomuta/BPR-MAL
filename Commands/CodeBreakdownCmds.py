@@ -46,3 +46,7 @@ class CodeLinesPerFileCommand(FileNameCommand):
 class CommentLinesPerFileCommand(FileNameCommand):
     def execute(self, file_name: str) -> dict:
         return get_match_with_file(file_name, COMMENTS_PATTERN)
+
+class CSFilesCommand(FileNameCommand):
+    def execute(self, file_name: str) -> int:
+        return 1 if file_name.endswith(".cs") else 0

@@ -12,7 +12,7 @@ commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyComma
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
             InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeSimilarityCommand(),
-            UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(), CommentLinesPerFileCommand()]
+            UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(), CommentLinesPerFileCommand(),CSFilesCommand()]
 
 def get_rules(commands) -> list:
     return [type(command).__name__.rstrip("Command") for command in commands]

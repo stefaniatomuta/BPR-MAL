@@ -1,5 +1,6 @@
 import os
 import git
+import uuid
 
 def clone_repositories(file_path, destination_folder):
     with open(file_path, 'r') as file:
@@ -7,15 +8,11 @@ def clone_repositories(file_path, destination_folder):
 
     for repo_url in repositories:
         try:
-            repo = git.Repo.clone_from(repo_url, os.path.join(destination_folder, get_owner_name(repo_url)))
+            repo = git.Repo.clone_from(repo_url, os.path.join(destination_folder, str(uuid.uuid4())))
             print(f"Repository cloned successfully: {repo_url}")
         except Exception as e:
             print(f"Failed to clone repository {repo_url}. Error: {str(e)}")
 
-def get_owner_name(repo_url):
-    # Extract owner name from GitHub repository URL
-    parts = repo_url.split('/')
-    return parts[-2]
 
 if __name__ == "__main__":
     # Provide the path to the text file containing GitHub repository URLs
