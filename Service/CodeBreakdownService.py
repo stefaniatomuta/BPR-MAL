@@ -1,5 +1,5 @@
 import re
-
+import os
 
 def get_number_of_matches_in_file(file_name, pattern):
     with open(file_name, 'r', encoding='utf8', errors='ignore') as file:
@@ -34,4 +34,7 @@ def get_match_with_file(file_name, pattern) -> dict:
         if file_name.endswith('.cs'):
             code = file.read()
             matches = re.findall(pattern, code, re.MULTILINE)
-            return {file_name: len(matches)}
+            parts = os.path.relpath(file_name).split(os.path.sep)
+            index_of_first_non_dotted = next((i for i, part in enumerate(parts) if part != '..'), len(parts))
+            relpath = os.path.join(*parts[index_of_first_non_dotted:])
+            return {relpath: len(matches)}
