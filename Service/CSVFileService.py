@@ -1,6 +1,9 @@
 import csv
+import os
 
-csv_path = '../Data/data.csv'
+csv_path = 'C:\\Users\\user\\Desktop\\BPR-MAL\\Data\\data.csv'
+
+
 def write_row_to_csv(row):
     with open(csv_path, 'a', newline='') as f:
         writer = csv.writer(f)
@@ -25,17 +28,16 @@ def read_columns(path):
 
 
 def write_column_headers_to_csv(commands):
-    if is_empty(csv_path):
-        with open(csv_path, 'a', newline='') as f:
-            writer = csv.writer(f)
-            headers = ['Project_ID']
-            headers.extend(command for command in commands)
-            writer.writerow(headers)
+    with open(csv_path, 'a', newline='') as f:
+        writer = csv.writer(f)
+        headers = ['Project_ID']
+        headers.extend(command for command in commands)
+        writer.writerow(headers)
 
-def is_empty(path):
-    with open(path,'r') as csvfile:
-        reader = csv.reader(csvfile)
-        for i, _ in enumerate(reader):
-            if i:
-                return False
-    return True
+# def is_empty(path):
+#     with open(path,'r') as csvfile:
+#         reader = csv.reader(csvfile)
+#         for i, _ in enumerate(reader):
+#             if i:
+#                 return False
+#     return True

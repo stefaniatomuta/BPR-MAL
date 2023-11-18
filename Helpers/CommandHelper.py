@@ -8,10 +8,6 @@ from Commands.CallsToExternalProvidersCmds import *
 commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(),
+            ExternalAPICallsCommand(), HttpClientCallsCommand(),
             UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(),
             CommentLinesPerFileCommand(), CodeSimilarityCommand()]
-
-# commands = [EndOfLifeFrameworkCommand(),
-#             CodeLinesCommand(),
-#             UsingsNumberCommand(), ClassCouplingListingCommand()]

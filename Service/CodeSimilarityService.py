@@ -4,6 +4,7 @@ import tempfile
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
 from Helpers.GitIgnoreHelper import *
+
 fail_threshold = 100
 ignore_threshold = 0
 
@@ -18,7 +19,8 @@ def get_all_source_code_from_directory(directory, file_extensions):
         dirs[:] = [d for d in dirs if not should_ignore_dir(d, gitignore_content)]
         for file_name in files:
             files_roots.append(os.path.join(root, file_name))
-        source_code_files.extend([file for file in files_roots if not is_ignored(file, gitignore_content) and file_extensions in file and file not in source_code_files])
+        source_code_files.extend([file for file in files_roots if not is_ignored(file,
+                                                                                 gitignore_content) and file_extensions in file and file not in source_code_files])
     return source_code_files
 
 
@@ -111,8 +113,3 @@ def get_code_similarity(directory):
         if len(code_similarity[short_source_file_path]) == empty_length:
             del code_similarity[short_source_file_path]
     return code_similarity
-
-
-def get_code_similarity_values(code_similarity):
-    all_values = [value for sub_dict in code_similarity.values() for value in sub_dict.values()]
-    return list(dict.fromkeys(all_values))

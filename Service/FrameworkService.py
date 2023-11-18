@@ -18,13 +18,3 @@ def get_matches(file_name) -> dict:
                     info = EOL_API(match)
                     file_matches[file_base_name] = {'version': match, 'status': info.isEndOfLife}
     return file_matches
-
-
-def get_number_eod_frameworks(file_name) -> int:
-    count = []
-    for file, match in get_matches(file_name).items():
-        info = EOL_API(match)
-        if info:
-            if info.isEndOfLife:
-                count.append(info)
-    return len(count)
