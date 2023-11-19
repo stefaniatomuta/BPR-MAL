@@ -8,7 +8,8 @@ def process_request(folder_path, request_rules):
     extraction_result, all_rules = process_data_from_folder(folder_path)
     intact_extraction = extraction_result
     processed_result = filter_result(intact_extraction, request_rules)
-    processed_result['codesimilarity'] = filter_code_similarity(processed_result['codesimilarity'])
+    if processed_result:
+        processed_result['codesimilarity'] = filter_code_similarity(processed_result['codesimilarity'])
     write_result(extraction_result, all_rules)
     return processed_result
 
@@ -18,6 +19,6 @@ def automate_data_insertion(root_folder):
         extraction_result, all_rules = process_data_from_folder(folder_path)
         write_result(extraction_result,all_rules)
 
-# automate_data_insertion(r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\Test")
+# automate_data_insertion(r"path here")
 
-process_request(r"C:\Users\adria\Desktop\UNI\Semester 7\BPR\BPR-FE",[])
+process_request(r"path here",[])
