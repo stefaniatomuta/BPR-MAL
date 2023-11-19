@@ -1,6 +1,6 @@
 import csv
 
-csv_path = 'C:\\Users\\user\\Desktop\\BPR-MAL\\Data\\data.csv'
+csv_path = r'..\\Data\\data.csv'
 
 
 def write_row_to_csv(row):
