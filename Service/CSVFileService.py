@@ -1,13 +1,15 @@
 import csv
 
+csv_path = 'C:\\Users\\user\\Desktop\\BPR-MAL\\Data\\data.csv'
+
 
 def write_row_to_csv(row):
-    with open('../Data/data.csv', 'a', newline='') as f:
+    with open(csv_path, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(row)
 
 
-def write_to_csv(command_dictionary, csv_path='../Data/data.csv'):
+def write_to_csv(command_dictionary, csv_path=csv_path):
     columns = read_columns(csv_path)
     row = [''] * len(columns)
     for key, value in command_dictionary.items():
@@ -17,17 +19,16 @@ def write_to_csv(command_dictionary, csv_path='../Data/data.csv'):
     write_row_to_csv(row)
 
 
-def read_columns(csv_path):
-    with open(csv_path, 'r', newline='') as csvfile:
+def read_columns(path):
+    with open(path, 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         first_row = next(reader, None)
     return first_row
 
 
-def write_columns_to_csv(commands):
-    with open('../Data/data.csv', 'a', newline='') as f:
+def write_column_headers_to_csv(commands):
+    with open(csv_path, 'a', newline='') as f:
         writer = csv.writer(f)
-        commands = [command.__class__.__name__.rstrip("Command") for command in commands]
         headers = ['Project_ID']
         headers.extend(command for command in commands)
         writer.writerow(headers)

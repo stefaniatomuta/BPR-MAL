@@ -3,26 +3,24 @@ import gensim
 import tempfile
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
-import numpy as np
-source_code_file_extensions = ["h", "c", "cpp", "cc", "java", "py", "cs"]
-file_column_label = "File"
-file_loc_label = ",#LoC"
-similarity_column_label = "Similarity (%)"
-similarity_label_length = len(similarity_column_label)
+from Helpers.GitIgnoreHelper import *
+
 fail_threshold = 100
 ignore_threshold = 0
 
 
 # """Get a list with all the source code files within the directory"""
 def get_all_source_code_from_directory(directory, file_extensions):
-    source_code_files = list()
-    for dirpath, _, filenames in os.walk(directory):
-        for name in filenames:
-            _, file_extension = os.path.splitext(name)
-            if file_extension[1:] in file_extensions:
-                filename = os.path.join(dirpath, name)
-                source_code_files.append(filename)
+    source_code_files = []
+    gitignore_content = read_gitignore()
+    files_roots = []
 
+    for root, dirs, files in os.walk(directory):
+        dirs[:] = [d for d in dirs if not should_ignore_dir(d, gitignore_content)]
+        for file_name in files:
+            files_roots.append(os.path.join(root, file_name))
+        source_code_files.extend([file for file in files_roots if not is_ignored(file,
+                                                                                 gitignore_content) and file_extensions in file and file not in source_code_files])
     return source_code_files
 
 
@@ -76,7 +74,7 @@ def get_source_code_files(directory, file_extensions):
 
 
 def get_code_similarity(directory):
-    source_code_files = get_source_code_files(directory, 'cs')
+    source_code_files = get_source_code_files(directory, "cs")
     proj_root_dir = get_proj_root_dir(directory)
     source_code = parse_source_code(source_code_files)
     # Create a Similarity object of all the source code
@@ -115,9 +113,3 @@ def get_code_similarity(directory):
         if len(code_similarity[short_source_file_path]) == empty_length:
             del code_similarity[short_source_file_path]
     return code_similarity
-
-
-def get_code_similarity_values(folder_path):
-    code_similarity = get_code_similarity(folder_path)
-    all_values = [value for sub_dict in code_similarity.values() for value in sub_dict.values()]
-    return list(dict.fromkeys(all_values))

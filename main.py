@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, constr, Field
-from Service.FileLoadService import process_data_from_folder
+from Handlers.RequestHandler import process_request
+import uvicorn
 
 app = FastAPI()
 
@@ -12,5 +13,11 @@ class RequestBody(BaseModel):
 
 @app.post("/upload_code")
 async def upload_code(body: RequestBody):
-    process_data_from_folder(body.path, body.rules)
-    return
+    result = process_request(body.path, body.rules)
+    return result
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
