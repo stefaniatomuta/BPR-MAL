@@ -8,5 +8,5 @@ class ClassCouplingCommand(FilesCommand):
 
 
 class ClassCouplingListingCommand(FilesCommand):
-    def execute(self, files: list) -> list:
+    def execute(self, files: list) -> dict:
         return class_coupling_listing(files)

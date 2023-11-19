@@ -1,23 +1,15 @@
 import uuid
-from Commands.CodeBreakdownCmds import *
-from Commands.FrameworkCmd import *
-from Commands.InheritanceOverheadCmds import *
-from Commands.MetricsCmd import *
-from Commands.TermFrequencyCmds import *
+from Helpers.CommandHelper import commands
 from Helpers.GitIgnoreHelper import *
 from Commands.CallsToExternalProvidersCmds import *
 import os
 
-commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
-            ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
-            MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
-            InheritanceDepthCommand(), ExternalAPICallsCommand(), HttpClientCallsCommand(), CodeSimilarityCommand(),
-            UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(), CommentLinesPerFileCommand(),CSFilesCommand()]
 
 def get_rules(commands) -> list:
     return [type(command).__name__.rstrip("Command") for command in commands]
 
-def process_data_from_folder(folder_path) -> ({},[]):
+
+def process_data_from_folder(folder_path) -> ({}, []):
     rules = get_rules(commands)
     sums = {}
     gitignore_content = read_gitignore()
@@ -50,4 +42,4 @@ def process_data_from_folder(folder_path) -> ({},[]):
                 if (isinstance(analysis_results, int)):
                     sums[command_name] = sums.get(str(command_name), 0) + analysis_results
 
-    return sums,rules
+    return sums, rules
