@@ -14,6 +14,11 @@ def filter_result(result, requested_rules) -> {}:
     return filtered_results
 
 
+def filter_code_similarity(result):
+    return {outer_key: {inner_key: value for inner_key, value in inner_dict.items() if value > 15} for
+            outer_key, inner_dict in result.items()}
+
+
 def dispatch_command_matches(rules):
     matched_commands = []
     for rule in rules:

@@ -1,5 +1,4 @@
 import csv
-import os
 
 csv_path = 'C:\\Users\\user\\Desktop\\BPR-MAL\\Data\\data.csv'
 
@@ -33,11 +32,3 @@ def write_column_headers_to_csv(commands):
         headers = ['Project_ID']
         headers.extend(command for command in commands)
         writer.writerow(headers)
-
-# def is_empty(path):
-#     with open(path,'r') as csvfile:
-#         reader = csv.reader(csvfile)
-#         for i, _ in enumerate(reader):
-#             if i:
-#                 return False
-#     return True
