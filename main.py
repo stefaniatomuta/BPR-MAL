@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, constr, Field
 from Handlers.RequestHandler import process_request
-import uvicorn
 
 app = FastAPI()
 
@@ -20,4 +19,4 @@ async def upload_code(body: RequestBody):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")

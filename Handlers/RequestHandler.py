@@ -2,6 +2,7 @@ from Service.ExtractionService import *
 from Service.FileLoadService import *
 from Service.CommandHandlerService import *
 
+TrainModel = False
 
 ##TODO: once the ML part is ready add a service that deals with that and is called here to return the value together with the rest
 def process_request(folder_path, request_rules):
@@ -10,7 +11,8 @@ def process_request(folder_path, request_rules):
     processed_result = filter_result(intact_extraction, request_rules)
     if processed_result:
         processed_result['codesimilarity'] = filter_code_similarity(processed_result['codesimilarity'])
-    write_result(extraction_result, all_rules)
+    if TrainModel:
+        write_result(extraction_result, all_rules)
     return processed_result
 
 def automate_data_insertion(root_folder):
@@ -18,7 +20,3 @@ def automate_data_insertion(root_folder):
         folder_path = os.path.join(root_folder,folder)
         extraction_result, all_rules = process_data_from_folder(folder_path)
         write_result(extraction_result,all_rules)
-
-# automate_data_insertion(r"path here")
-
-process_request(r"path here",[])
