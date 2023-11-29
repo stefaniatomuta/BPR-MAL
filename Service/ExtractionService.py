@@ -34,10 +34,10 @@ def process_data_from_folder(folder_path) -> ({}, []):
             for file_name in files_roots:
                 analysis_results = command.execute(file_name)
                 if isinstance(analysis_results, list) or isinstance(analysis_results, dict):
-                    if len(analysis_results) != 0:
                         if command_name not in sums:
                             sums[command_name] = []
-                        sums[command_name].append(analysis_results)
+                        if len(analysis_results) != 0:
+                            sums[command_name].append(analysis_results)
 
                 if (isinstance(analysis_results, int)):
                     sums[command_name] = sums.get(str(command_name), 0) + analysis_results

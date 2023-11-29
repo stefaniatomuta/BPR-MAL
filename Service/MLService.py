@@ -1,7 +1,5 @@
-import joblib
 import pickle
-##TODO: update the actual path
-model_pkl_path = "technical_debt_model.pkl"
+model_pkl_path = "Jupyter/technical_debt_model.pkl"
 
 def load_model(path):
     with open(path, 'rb') as file:
