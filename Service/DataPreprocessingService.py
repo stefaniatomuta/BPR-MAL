@@ -31,7 +31,7 @@ def get_boundaries(lower, higher, numberOfBins):
 def handle_column_data(column):
     return column.apply(lambda x: np.array([float(value) for value in x.strip('[]').split(',') if value]))
 
-def handle_list_to_median(columns, df):
+def handle_list_to_median(columns:list, df: pd.DataFrame) -> pd.DataFrame:
     '''
     Description:
         Processes the dataframe and creates new columns with the median value in each row of the column if it is a list
@@ -43,13 +43,14 @@ def handle_list_to_median(columns, df):
         Dataframe: a dataframe with new columns created for each column given in 'columns'.
         The value in the new column is the median value of each list in each row
     '''
+    print(type(df))
     for column in columns:
-        data = df[columns].apply(lambda x: np.array([float(value) for value in x.strip('[]').split(',') if value]))
+        print(column)
+        data = df[column].apply(lambda x: np.array([float(value) for value in x.strip('[]').split(',') if value]))
         data2 = data.apply(lambda x: np.median(x))
         df[f'{column}_Median'] = data2
     return df
 
-# return the dataframe
 def remove_outliers(columns, df):
     for column in columns:
         std = df[column].std()
