@@ -43,9 +43,7 @@ def handle_list_to_median(columns:list, df: pd.DataFrame) -> pd.DataFrame:
         Dataframe: a dataframe with new columns created for each column given in 'columns'.
         The value in the new column is the median value of each list in each row
     '''
-    print(type(df))
     for column in columns:
-        print(column)
         data = df[column].apply(lambda x: np.array([float(value) for value in x.strip('[]').split(',') if value]))
         data2 = data.apply(lambda x: np.median(x))
         df[f'{column}_Median'] = data2
@@ -62,6 +60,7 @@ def impute_nans(df):
     imputer = KNNImputer(n_neighbors=2, weights="uniform")
     columns = df.columns
     return pd.DataFrame(imputer.fit_transform(df), columns=columns)
+
 def impute_zero_values(df):
     imputer = KNNImputer(n_neighbors=2, weights="uniform",missing_values=0)
     columns = df.columns
@@ -76,11 +75,9 @@ def sqrt_columns(columns, df):
     for column in columns:
         df[column] = np.sqrt(df[column])
 
-
 def yeojohnson(columns, df):
     for column in columns:
         df[column] = stats.yeojohnson(df[column])[0]
-
 
 def knn_smoothing(data, window_size):
     X = np.arange(len(data)).reshape(-1, 1)

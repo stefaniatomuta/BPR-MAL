@@ -25,7 +25,7 @@ def transform_data(data):
         columns=['Project_ID', 'ClassCouplingListing', 'CodeSimilarity', 'ExternalAPICalls', 'ExternalAPIExtracted',
                  'CodeLinesPerFile', 'CommentLinesPerFile'], axis=1, inplace=True)
     columns = dataframe.select_dtypes(include=np.number).columns
-    dataframe = remove_outliers(columns,dataframe)
+    dataframe = remove_outliers(columns, dataframe)
     imputed_nans = impute_nans(dataframe)
     imputed_nans.drop('ExternalAPICalls_Median', inplace=True, axis=1)
     dataframe = impute_zero_values(imputed_nans)
