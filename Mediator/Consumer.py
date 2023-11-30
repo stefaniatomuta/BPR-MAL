@@ -7,7 +7,7 @@ async def process_message(message):
     async with message.process():
         try:
             data = eval(message.body.decode())
-            result = process_request(data['path'], data['rules'])
+            result = process_request(data['path'], data['rules'], data['correlation_id'])
             await send_to_rabbitmq(result)
             print("Processing result:", result)
         except Exception as e:
