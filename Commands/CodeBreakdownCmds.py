@@ -39,13 +39,13 @@ class CodeSimilarityCommand(FolderCommand):
     def execute(self, folder_path: str) -> list:
         return get_code_similarity(folder_path)
 
-class CodeLinesPerFileCommand(FileNameCommand):
-    def execute(self, file_name: str) -> dict:
-        return get_match_with_file(file_name, CODELINES_PATTERN)
+class CodeLinesPerFileCommand(FileNameRootCommand):
+    def execute(self, folder_path, file_name: str) -> dict:
+        return get_match_with_file(folder_path, file_name, CODELINES_PATTERN)
 
-class CommentLinesPerFileCommand(FileNameCommand):
-    def execute(self, file_name: str) -> dict:
-        return get_match_with_file(file_name, COMMENTS_PATTERN)
+class CommentLinesPerFileCommand(FileNameRootCommand):
+    def execute(self,folder_path, file_name: str) -> dict:
+        return get_match_with_file(folder_path, file_name, COMMENTS_PATTERN)
 
 class CSFilesCommand(FileNameCommand):
     def execute(self, file_name: str) -> int:

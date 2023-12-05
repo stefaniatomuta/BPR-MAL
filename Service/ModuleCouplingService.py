@@ -21,13 +21,13 @@ def class_coupling_mapping(files) -> dict:
     return class_coupling_list
 
 
-def class_coupling_listing(files) -> dict:
+def class_coupling_listing(folder_path, files) -> dict:
     class_coupling_list = {}
     for file_name in files:
         if file_name.endswith('.cs'):
             with open(file_name, 'r', encoding='utf8', errors='ignore') as f:
                 code = f.read()
-                file_base_name = os.path.relpath(file_name)
+                file_base_name = file_name.replace(folder_path, "")
                 class_name = r'class (\w+)?'
                 class_match = re.findall(class_name, code)
                 if len(class_match) != 0:

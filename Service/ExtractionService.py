@@ -30,9 +30,14 @@ def process_data_from_folder(folder_path) -> ({}, []):
         if isinstance(command, FilesCommand):
             analysis_results = command.execute(files_roots)
             sums[command_name] = analysis_results
-        if isinstance(command, FileNameCommand):
-            for file_name in files_roots:
+        if isinstance(command, FilesRootCommand):
+            analysis_results = command.execute(folder_path, files_roots)
+            sums[command_name] = analysis_results
+        for file_name in files_roots:
+            if isinstance(command, FileNameCommand):
                 analysis_results = command.execute(file_name)
+            if isinstance(command, FileNameRootCommand):
+                analysis_results = command.execute(folder_path, file_name)
                 if isinstance(analysis_results, list) or isinstance(analysis_results, dict):
                         if command_name not in sums:
                             sums[command_name] = []
