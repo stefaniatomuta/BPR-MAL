@@ -15,7 +15,7 @@ def filter_result(result, requested_rules) -> {}:
 
 
 def filter_code_similarity(result):
-    return {outer_key: {inner_key: value for inner_key, value in sorted(inner_dict.items(), key=lambda x: x[1], reverse=True) if value > 15} for
+    return {outer_key: {inner_key: value for inner_key, value in sorted(inner_dict.items(), key=lambda x: x[1], reverse=True) if value > 60} for
             outer_key, inner_dict in result.items()}
 
 
