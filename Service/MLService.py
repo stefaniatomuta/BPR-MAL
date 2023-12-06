@@ -2,7 +2,8 @@ import pickle
 import pandas as pd
 from DataPreprocessingService import *
 
-model_pkl_path = "Jupyter/technical_debt_model.pkl"
+model_pkl_path = "../Jupyter/technical_debt_model.pkl"
+pca_pkl_path = "../Jupyter/pca.pkl"
 
 def load_model(path):
     with open(path, 'rb') as file:
@@ -10,6 +11,7 @@ def load_model(path):
         return model
 
 model = load_model(model_pkl_path)
+pcas = load_model(pca_pkl_path)
 
 # maybe some processing of the data here if needed in the future after the model is trained
 def predict(data):
@@ -22,7 +24,7 @@ def transform_data(data):
     columns = ['CodeSimilarity', 'ClassCouplingListing', 'CodeLinesPerFile', 'CommentLinesPerFile', 'ExternalAPICalls']
     dataframe = handle_list_to_median(columns, dataframe)
     dataframe.drop(
-        columns=['Project_ID', 'ClassCouplingListing', 'CodeSimilarity', 'ExternalAPICalls', 'ExternalAPIExtracted',
+        columns=['Project_ID', 'Project_Name', 'ClassCouplingListing', 'CodeSimilarity', 'ExternalAPICalls',
                  'CodeLinesPerFile', 'CommentLinesPerFile'], axis=1, inplace=True)
     columns = dataframe.select_dtypes(include=np.number).columns
     dataframe = remove_outliers(columns, dataframe)
@@ -37,5 +39,5 @@ def transform_data(data):
                'EndOfLifeFramework']
     yeojohnson(columns, dataframe)
     knn_df = knn_smoothing(dataframe,5)
-    pca = create_pca(knn_df)
+    pca = pcas.transform(knn_df)
     return pca
