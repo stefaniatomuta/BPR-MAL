@@ -34,17 +34,21 @@ def process_data_from_folder(folder_path) -> ({}, []):
             analysis_results = command.execute(folder_path, files_roots)
             sums[command_name] = analysis_results
         for file_name in files_roots:
-            if isinstance(command, FileNameRootCommand):
-                analysis_results = command.execute(folder_path, file_name)
-            elif isinstance(command, FileNameCommand):
-                analysis_results = command.execute(file_name)
-                if isinstance(analysis_results, list) or isinstance(analysis_results, dict):
-                        if command_name not in sums:
-                            sums[command_name] = []
-                        if len(analysis_results) != 0:
-                            sums[command_name].append(analysis_results)
+            analysis_results = (
+                command.execute(folder_path, file_name)
+                if isinstance(command, FileNameRootCommand)
+                else (
+                    command.execute(file_name)
+                    if isinstance(command, FileNameCommand)
+                    else None)
+            )
+            if isinstance(analysis_results, list) or isinstance(analysis_results, dict):
+                    if command_name not in sums:
+                        sums[command_name] = []
+                    if len(analysis_results) != 0:
+                        sums[command_name].append(analysis_results)
 
-                if (isinstance(analysis_results, int)):
-                    sums[command_name] = sums.get(str(command_name), 0) + analysis_results
+            if (isinstance(analysis_results, int)):
+                sums[command_name] = sums.get(str(command_name), 0) + analysis_results
 
     return sums, rules
