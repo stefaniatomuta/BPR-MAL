@@ -57,12 +57,12 @@ def remove_outliers(columns, df):
     return df
 
 def impute_nans(df):
-    imputer = KNNImputer(n_neighbors=2, weights="uniform")
+    imputer = KNNImputer(n_neighbors=2, weights="uniform", keep_empty_features=True)
     columns = df.columns
     return pd.DataFrame(imputer.fit_transform(df), columns=columns)
 
 def impute_zero_values(df):
-    imputer = KNNImputer(n_neighbors=2, weights="uniform",missing_values=0)
+    imputer = KNNImputer(n_neighbors=2, weights="uniform",missing_values=0, keep_empty_features=True)
     columns = df.columns
     return pd.DataFrame(imputer.fit_transform(df), columns=columns)
 
@@ -77,6 +77,7 @@ def sqrt_columns(columns, df):
 
 def yeojohnson(columns, df):
     for column in columns:
+        print(column)
         df[column] = stats.yeojohnson(df[column])[0]
 
 def knn_smoothing(data, window_size):
@@ -85,8 +86,3 @@ def knn_smoothing(data, window_size):
     knn.fit(X, data)
     smoothed_data = knn.predict(X)
     return smoothed_data
-
-def create_pca(df):
-    X_s = preprocessing.StandardScaler().fit_transform(df)
-    pcas = decomposition.PCA(n_components=2)
-    return pcas.fit_transform(X_s)
