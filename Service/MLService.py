@@ -1,5 +1,4 @@
 import pickle
-import pandas as pd
 from Service.DataPreprocessingService import *
 from Service.TransformService import *
 
@@ -14,17 +13,18 @@ def load_model(path):
 model = load_model(model_pkl_path)
 pcas = load_model(pca_pkl_path)
 
-# maybe some processing of the data here if needed in the future after the model is trained
+
+manual_labels = {0:"Medium", 1:"High", 2:"Highest", 3:"Low"}
+def map_manual_labels(cluster_label):
+    return manual_labels[cluster_label]
+
 def predict(data):
     transformed_data = transform_data(data)
-    # print(transformed_data)
-    return model.predict(transformed_data)
-
+    return map_manual_labels(model.predict(transformed_data)[0])
 
 def transform_data(data):
-    data = process_code_similarity(data)
+    data = transform_extracted_data(data)
     dataframe = pd.DataFrame.from_dict([data])
-    # print(dataframe)
     columns = ['CodeSimilarity', 'ClassCouplingListing', 'CodeLinesPerFile', 'CommentLinesPerFile', 'ExternalAPICalls']
     dataframe = handle_list_to_median_system(columns, dataframe)
     dataframe.drop(
@@ -35,7 +35,6 @@ def transform_data(data):
     imputed_nans = impute_nans(dataframe)
     imputed_nans.drop('ExternalAPICalls_Median', inplace=True, axis=1)
     dataframe = impute_zero_values(imputed_nans)
-    # print(dataframe)
     dataframe = combine_term_frequency(dataframe)
     columns = ['CodeLines', 'CommentLines', 'MethodNumber',
                'ClassNumber', 'InterfaceNumber', 'InheritanceDeclarations',
@@ -43,9 +42,12 @@ def transform_data(data):
                'ClassCouplingListing_Median', 'CodeLinesPerFile_Median', 'CommentLinesPerFile_Median', 'TermFrequency',
                'EndOfLifeFramework']
     sqrt_columns(columns, dataframe)
-    # print(dataframe)
+    columns = ['CodeLines', 'CommentLines', 'MethodNumber',
+       'ClassNumber', 'InterfaceNumber','InheritanceDeclarations', 
+       'UsingsNumber','HttpClientCalls', 'CSFiles','TermFrequency','CommentLinesPerFile_Median', 'TermFrequency']
+    sqrt_columns(columns, dataframe)
     knn_df = knn_smoothing(dataframe,1)
-    # print(knn_df)
     pca = pcas.transform(knn_df)
-    # df = np.array([knn_df[0,1],knn_df[0,4]])
     return pca
+
+

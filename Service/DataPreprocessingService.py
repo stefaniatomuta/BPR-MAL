@@ -44,8 +44,6 @@ def handle_list_to_median(columns:list, df: pd.DataFrame) -> pd.DataFrame:
         The value in the new column is the median value of each list in each row
     '''
     for column in columns:
-        # print(column)
-        # print(df[column])
         data = df[column].apply(lambda x: np.array([float(value) for value in x.strip('[]').split(',') if value]))
         data2 = data.apply(lambda x: np.median(x))
         df[f'{column}_Median'] = data2
@@ -53,8 +51,6 @@ def handle_list_to_median(columns:list, df: pd.DataFrame) -> pd.DataFrame:
 
 def handle_list_to_median_system(columns:list, df: pd.DataFrame) -> pd.DataFrame:
     for column in columns:
-        # print(column)
-        # print(df[column])
         data2 = df[column].apply(lambda x: np.median(x))
         df[f'{column}_Median'] = data2
     return df
@@ -83,7 +79,6 @@ def combine_term_frequency(df):
 def sqrt_columns(columns, df):
     for column in columns:
         df[column] = np.sqrt(df[column])
-
 
 def yeojohnson(columns, df):
     for column in columns:

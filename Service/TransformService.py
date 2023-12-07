@@ -1,4 +1,4 @@
-def process_code_similarity(result):
+def transform_extracted_data(result):
     result['CodeSimilarity'] = get_list_values_from_sub_dict(result['CodeSimilarity'])
     result['ClassCouplingListing'] = get_list_values_from_dict(result['ClassCouplingListing'])
     result['EndOfLifeFramework'] = count_true_statuses(result['EndOfLifeFramework'])
