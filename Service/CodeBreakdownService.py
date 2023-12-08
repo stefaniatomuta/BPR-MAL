@@ -31,12 +31,10 @@ def get_matches_in_files(files, pattern):
     return filteredList
 
 
-def get_match_with_file(file_name, pattern) -> dict:
+def get_match_with_file(folder_path, file_name, pattern) -> dict:
     with open(file_name, 'r', encoding='utf8', errors='ignore') as file:
         if file_name.endswith('.cs'):
             code = file.read()
             matches = re.findall(pattern, code, re.MULTILINE)
-            parts = os.path.relpath(file_name).split(os.path.sep)
-            index_of_first_non_dotted = next((i for i, part in enumerate(parts) if part != '..'), len(parts))
-            relpath = os.path.join(*parts[index_of_first_non_dotted:])
+            relpath = file_name.replace(folder_path, "")
             return {relpath: len(matches)}
