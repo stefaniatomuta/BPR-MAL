@@ -2,7 +2,7 @@ from Service.CodeBreakdownService import *
 from Helpers.RegexHelper import *
 import re
 
-nuget_packages = []
+nuget_packages = {}
 
 
 def get_usage_of_httpclient(files):
@@ -15,24 +15,24 @@ def get_usage_of_httpclient(files):
     return usages
 
 
-def get_usage_of_nuget_packages(file_roots) -> list:
-    package_matches = []
+def get_usage_of_nuget_packages(file_roots) -> dict:
+    package_matches = {}
     for file_name in file_roots:
         if file_name.endswith('.csproj'):
             with open(file_name, 'r', encoding='utf8', errors='ignore') as f:
                 code = f.read()
                 matches = re.findall(CSPROJ_PACKAGE_REFERENCE, code)
-                for match in matches:
-                    if match not in package_matches:
-                        package_matches.append(match)
+                for include, version in matches:
+                    if include not in package_matches:
+                        package_matches[include] = [version]
+                    else:
+                        if version not in package_matches[include]:
+                            package_matches[include].append(version)
     return package_matches
 
 
-def extend_nuget_packages(nugets_per_csproj) -> list:
-    set1 = set(nuget_packages)
-    set2 = set(nugets_per_csproj)
-    nugets_to_add = set2.difference(set1)
-    nuget_packages.extend(nugets_to_add)
+def extend_nuget_packages(nugets_per_csproj):
+    nuget_packages.update(nugets_per_csproj)
     return nuget_packages
 
 
@@ -42,9 +42,10 @@ def get_all_nuget_packages(file_roots):
 
 
 def get_usings_nuget_matches(files_roots: list) -> dict:
+    global nuget_packages
     nuget_matches = {}
     get_all_nuget_packages(files_roots)
-    for nuget in nuget_packages:
+    for nuget, version in nuget_packages.items():
         pattern = r'using ' + nuget
         usage_count = 0
         for file_name in files_roots:
@@ -54,6 +55,6 @@ def get_usings_nuget_matches(files_roots: list) -> dict:
                     matches = re.findall(pattern, code)
                     usage_count += len(matches)
 
-            nuget_matches[nuget] = usage_count
-
+            nuget_matches[nuget] = {'Usage': usage_count, 'Versions': version}
+    nuget_packages = {}
     return nuget_matches

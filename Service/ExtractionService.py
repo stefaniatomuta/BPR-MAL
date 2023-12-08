@@ -50,5 +50,5 @@ def process_data_from_folder(folder_path) -> ({}, []):
 
             if (isinstance(analysis_results, int)):
                 sums[command_name] = sums.get(str(command_name), 0) + analysis_results
-
+    
     return sums, rules
