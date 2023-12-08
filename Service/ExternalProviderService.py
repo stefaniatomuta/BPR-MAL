@@ -42,6 +42,7 @@ def get_all_nuget_packages(file_roots):
 
 
 def get_usings_nuget_matches(files_roots: list) -> dict:
+    global nuget_packages
     nuget_matches = {}
     get_all_nuget_packages(files_roots)
     for nuget in nuget_packages:
@@ -55,5 +56,5 @@ def get_usings_nuget_matches(files_roots: list) -> dict:
                     usage_count += len(matches)
 
             nuget_matches[nuget] = usage_count
-
+    nuget_packages = []
     return nuget_matches
