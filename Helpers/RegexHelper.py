@@ -14,3 +14,4 @@ CLASS_COUPLING = r'\b[A-Z][A-Za-z0-9_]*(?:<[A-Za-z][A-Za-z0-9_]*>)?(?!(?:\s*\{|;
 CSPROJ_PACKAGE_REFERENCE = r'<PackageReference\s+Include="([^"]+)"[ ]*Version="([^"]+)".*?/>'
 TARGET_FRAMEWORK = r'<TargetFramework>([^-]+).*?</TargetFramework>'
 TARGET_FRAMEWORK_VERSION = r'<TargetFrameworkVersion>(.*?)</TargetFrameworkVersion>'
+NAMESPACE = r'namespace\s+([A-Za-z_][A-Za-z0-9_.]*)'

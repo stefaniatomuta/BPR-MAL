@@ -4,10 +4,11 @@ from Commands.InheritanceOverheadCmds import *
 from Commands.MetricsCmd import *
 from Commands.TermFrequencyCmds import *
 from Commands.CallsToExternalProvidersCmds import *
+from Commands.NamespaceCmd import *
 
 commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyCommand(),
             ForEachFrequencyCommand(), WhileFrequencyCommand(), CodeLinesCommand(), CommentLinesCommand(),
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
             ExternalAPICallsCommand(), HttpClientCallsCommand(),
             UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(),
-            CommentLinesPerFileCommand(), CodeSimilarityCommand(),CSFilesCommand()]
+            CommentLinesPerFileCommand(), CodeSimilarityCommand(),CSFilesCommand(), MismatchedNamespaceCommand()]
