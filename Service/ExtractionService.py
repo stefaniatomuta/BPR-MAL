@@ -16,6 +16,7 @@ def process_data_from_folder(folder_path) -> ({}, []):
     extracted_files = []
     files_roots = []
     sums['Project_ID'] = uuid.uuid4()
+    sums['Project_Name'] = os.path.basename(folder_path)
     for root, dirs, files in os.walk(folder_path):
         dirs[:] = [d for d in dirs if not should_ignore_dir(d, gitignore_content)]
         for file_name in files:

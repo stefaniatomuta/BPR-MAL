@@ -1,8 +1,9 @@
 import pickle
-import pandas as pd
-from DataPreprocessingService import *
+from Service.DataPreprocessingService import *
+from Service.TransformService import *
 
-model_pkl_path = "Jupyter/technical_debt_model.pkl"
+model_pkl_path = "../Jupyter/technical_debt_model.pkl"
+pca_pkl_path = "../Jupyter/pca.pkl"
 
 def load_model(path):
     with open(path, 'rb') as file:
@@ -10,19 +11,24 @@ def load_model(path):
         return model
 
 model = load_model(model_pkl_path)
+pcas = load_model(pca_pkl_path)
 
-# maybe some processing of the data here if needed in the future after the model is trained
+
+manual_labels = {0:"Medium", 1:"High", 2:"Highest", 3:"Low"}
+def map_manual_labels(cluster_label):
+    return manual_labels[cluster_label]
+
 def predict(data):
     transformed_data = transform_data(data)
-    return model.predict(transformed_data)
-
+    return map_manual_labels(model.predict(transformed_data)[0])
 
 def transform_data(data):
-    dataframe = pd.DataFrame(data)
+    data = transform_extracted_data(data)
+    dataframe = pd.DataFrame.from_dict([data])
     columns = ['CodeSimilarity', 'ClassCouplingListing', 'CodeLinesPerFile', 'CommentLinesPerFile', 'ExternalAPICalls']
-    dataframe = handle_list_to_median(columns, dataframe)
+    dataframe = handle_list_to_median_system(columns, dataframe)
     dataframe.drop(
-        columns=['Project_ID', 'ClassCouplingListing', 'CodeSimilarity', 'ExternalAPICalls', 'ExternalAPIExtracted',
+        columns=['Project_ID', 'Project_Name', 'ClassCouplingListing', 'CodeSimilarity', 'ExternalAPICalls',
                  'CodeLinesPerFile', 'CommentLinesPerFile'], axis=1, inplace=True)
     columns = dataframe.select_dtypes(include=np.number).columns
     dataframe = remove_outliers(columns, dataframe)
@@ -35,7 +41,13 @@ def transform_data(data):
                'UsingsNumber', 'HttpClientCalls', 'CSFiles', 'TermFrequency', 'CodeSimilarity_Median',
                'ClassCouplingListing_Median', 'CodeLinesPerFile_Median', 'CommentLinesPerFile_Median', 'TermFrequency',
                'EndOfLifeFramework']
-    yeojohnson(columns, dataframe)
-    knn_df = knn_smoothing(dataframe,5)
-    pca = create_pca(knn_df)
+    sqrt_columns(columns, dataframe)
+    columns = ['CodeLines', 'CommentLines', 'MethodNumber',
+       'ClassNumber', 'InterfaceNumber','InheritanceDeclarations', 
+       'UsingsNumber','HttpClientCalls', 'CSFiles','TermFrequency','CommentLinesPerFile_Median', 'TermFrequency']
+    sqrt_columns(columns, dataframe)
+    knn_df = knn_smoothing(dataframe,1)
+    pca = pcas.transform(knn_df)
     return pca
+
+

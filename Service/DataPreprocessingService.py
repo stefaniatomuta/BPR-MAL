@@ -49,6 +49,11 @@ def handle_list_to_median(columns:list, df: pd.DataFrame) -> pd.DataFrame:
         df[f'{column}_Median'] = data2
     return df
 
+def handle_list_to_median_system(columns:list, df: pd.DataFrame) -> pd.DataFrame:
+    for column in columns:
+        data2 = df[column].apply(lambda x: np.median(x))
+        df[f'{column}_Median'] = data2
+    return df
 def remove_outliers(columns, df):
     for column in columns:
         std = df[column].std()
@@ -57,12 +62,12 @@ def remove_outliers(columns, df):
     return df
 
 def impute_nans(df):
-    imputer = KNNImputer(n_neighbors=2, weights="uniform")
+    imputer = KNNImputer(n_neighbors=2, weights="uniform", keep_empty_features=True)
     columns = df.columns
     return pd.DataFrame(imputer.fit_transform(df), columns=columns)
 
 def impute_zero_values(df):
-    imputer = KNNImputer(n_neighbors=2, weights="uniform",missing_values=0)
+    imputer = KNNImputer(n_neighbors=2, weights="uniform",missing_values=0, keep_empty_features=True)
     columns = df.columns
     return pd.DataFrame(imputer.fit_transform(df), columns=columns)
 
@@ -85,8 +90,3 @@ def knn_smoothing(data, window_size):
     knn.fit(X, data)
     smoothed_data = knn.predict(X)
     return smoothed_data
-
-def create_pca(df):
-    X_s = preprocessing.StandardScaler().fit_transform(df)
-    pcas = decomposition.PCA(n_components=2)
-    return pcas.fit_transform(X_s)

@@ -1,0 +1,3 @@
+https://github.com/StackExchange/NetGain
+https://github.com/StackExchange/NRediSearch
+
