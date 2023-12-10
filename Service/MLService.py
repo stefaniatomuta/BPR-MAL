@@ -2,8 +2,8 @@ import pickle
 from Service.DataPreprocessingService import *
 from Service.TransformService import *
 
-model_pkl_path = "../Jupyter/technical_debt_model.pkl"
-pca_pkl_path = "../Jupyter/pca.pkl"
+model_pkl_path = "./Jupyter/technical_debt_model.pkl"
+pca_pkl_path = "./Jupyter/pca.pkl"
 
 def load_model(path):
     with open(path, 'rb') as file:
