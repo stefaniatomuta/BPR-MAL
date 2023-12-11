@@ -5,14 +5,14 @@ from Commands.CommandModel import *
 
 
 class InheritanceDeclarationsCommand(FileNameCommand):
-    def execute(self, file_name: str) -> int:
-        return get_number_of_matches_in_file(file_name, INHERITANCE_PATTERN)
+    async def execute(self, file_name: str) -> int:
+        return await get_number_of_matches_in_file(file_name, INHERITANCE_PATTERN)
 
 
 class InheritanceDepthCommand(FilesCommand):
-    def execute(self, files: list) -> int:
+    async def execute(self, files: list) -> int:
         try:
-            matches = get_matches_in_files(files, CLASS_PATTERN)
-            return get_max_inheritance_depth(matches)
+            matches = await get_matches_in_files(files, CLASS_PATTERN)
+            return await get_max_inheritance_depth(matches)
         except RecursionError:
             return 0

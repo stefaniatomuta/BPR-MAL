@@ -1,4 +1,4 @@
-def calculate_depth(class_name,class_matches):
+def calculate_depth(class_name, class_matches):
     class_depths = get_class_depths(class_matches)
     if class_name not in class_depths:
         return 0
@@ -12,7 +12,7 @@ def get_class_depths(class_matches):
             class_depths[class_name] = base_class
     return class_depths
 
-def get_max_inheritance_depth(class_matches):
+async def get_max_inheritance_depth(class_matches):
     max_depth = 0
     if len(class_matches):
         max_depth = max([calculate_depth(clas, class_matches) for clas in get_class_depths(class_matches).keys()])
