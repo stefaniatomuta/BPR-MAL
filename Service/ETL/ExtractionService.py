@@ -9,7 +9,7 @@ def get_rules(commands) -> list:
     return [type(command).__name__.rstrip("Command") for command in commands]
 
 
-def process_data_from_folder(folder_path) -> ({}, []):
+async def process_data_from_folder(folder_path) -> ({}, []):
     rules = get_rules(commands)
     sums = {}
     gitignore_content = read_gitignore()
@@ -36,7 +36,7 @@ def process_data_from_folder(folder_path) -> ({}, []):
             sums[command_name] = analysis_results
         for file_name in files_roots:
             analysis_results = (
-                command.execute(folder_path, file_name)
+                await command.execute(folder_path, file_name)
                 if isinstance(command, FileNameRootCommand)
                 else (
                     command.execute(file_name)
@@ -51,5 +51,5 @@ def process_data_from_folder(folder_path) -> ({}, []):
 
             if (isinstance(analysis_results, int)):
                 sums[command_name] = sums.get(str(command_name), 0) + analysis_results
-    
+    print(sums)        
     return sums, rules

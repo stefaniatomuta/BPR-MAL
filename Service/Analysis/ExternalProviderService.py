@@ -1,4 +1,4 @@
-from Service.CodeBreakdownService import *
+from Service.Analysis.CodeBreakdownService import *
 from Helpers.RegexHelper import *
 import re
 

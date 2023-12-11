@@ -1,5 +1,5 @@
 from Commands.CommandModel import *
-from Service.ModuleCouplingService import *
+from Service.Analysis.ModuleCouplingService import *
 
 
 class ClassCouplingListingCommand(FilesRootCommand):

@@ -1,7 +1,7 @@
-from Service.CodeBreakdownService import *
+from Service.Analysis.CodeBreakdownService import *
 from Helpers.RegexHelper import *
 from Commands.CommandModel import *
-from Service.CodeSimilarityService import *
+from Service.Analysis.CodeSimilarityService import *
 
 
 # this includes also comment lines
@@ -44,8 +44,8 @@ class CodeLinesPerFileCommand(FileNameRootCommand):
         return get_match_with_file(folder_path, file_name, CODELINES_PATTERN)
 
 class CommentLinesPerFileCommand(FileNameRootCommand):
-    def execute(self,folder_path, file_name: str) -> dict:
-        return get_match_with_file(folder_path, file_name, COMMENTS_PATTERN)
+    async def execute(self,folder_path, file_name: str) -> dict:
+        return await get_match_with_file(folder_path, file_name, COMMENTS_PATTERN)
 
 class CSFilesCommand(FileNameCommand):
     def execute(self, file_name: str) -> int:

@@ -1,5 +1,5 @@
-from Service.CodeBreakdownService import *
-from Service.InheritanceService import *
+from Service.Analysis.CodeBreakdownService import *
+from Service.Analysis.InheritanceService import *
 from Helpers.RegexHelper import *
 from Commands.CommandModel import *
 

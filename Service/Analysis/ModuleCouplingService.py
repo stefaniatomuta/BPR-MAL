@@ -1,6 +1,6 @@
 import re
 from Helpers.RegexHelper import *
-from Service.CodeSimilarityService import *
+from Service.Analysis.CodeSimilarityService import *
 
 
 def class_coupling_mapping(files) -> dict:

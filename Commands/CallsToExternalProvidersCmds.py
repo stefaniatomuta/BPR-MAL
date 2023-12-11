@@ -1,5 +1,5 @@
 from Commands.CommandModel import *
-from Service.ExternalProviderService import *
+from Service.Analysis.ExternalProviderService import *
 
 
 class ExternalAPICallsCommand(FilesCommand):

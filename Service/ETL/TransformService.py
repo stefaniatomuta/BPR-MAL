@@ -11,7 +11,6 @@ def transform_extracted_data(result):
 def get_from_list(data):
     return [value for dictionary in data for value in dictionary.values() if isinstance(value, (int, float))]
 
-
 def count_true_statuses(data):
     count = 0
     for item in data:

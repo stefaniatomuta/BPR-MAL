@@ -1,5 +1,4 @@
-import os
-import git
+import os, git
 
 def clone_repositories(file_path, destination_folder):
     with open(file_path, 'r') as file:
@@ -8,7 +7,7 @@ def clone_repositories(file_path, destination_folder):
     for repo_url in repositories:
         try:
             repo_name = get_repo_name(repo_url)
-            repo = git.Repo.clone_from(repo_url, os.path.join(destination_folder, f'{repo_name[0]}_{repo_name[1]}'))
+            git.Repo.clone_from(repo_url, os.path.join(destination_folder, f'{repo_name[0]}_{repo_name[1]}'))
             print(f"Repository cloned successfully: {repo_url}")
         except Exception as e:
             print(f"Failed to clone repository {repo_url}. Error: {str(e)}")

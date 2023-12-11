@@ -1,6 +1,4 @@
-import os
-import gensim
-import tempfile
+import os, gensim, tempfile
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
 from Helpers.GitIgnoreHelper import *

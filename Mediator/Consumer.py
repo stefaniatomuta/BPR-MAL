@@ -2,7 +2,7 @@ import time
 from Handlers.RequestHandler import process_request
 from Mediator.Producer import send_to_rabbitmq
 from Config.Config import *
-import pika
+import pika, asyncio
 
 async def process_message(requestQueue):
     while True:
@@ -11,12 +11,12 @@ async def process_message(requestQueue):
             message = requestQueue.get()
             try:
                 data = eval(message.decode())
-                result = process_request(data['path'], data['rules'], data['correlation_id'])
+                result = await process_request(data['path'], data['rules'], data['correlation_id'])
                 await send_to_rabbitmq(result)
                 print("Processed result:", result)
             except Exception as e:
                 print(f"Error processing message: {e}")
-        time.sleep(5)
+        await asyncio.sleep(5)
 
 
 def consume_from_queue(requestQueue):

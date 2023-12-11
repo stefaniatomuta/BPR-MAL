@@ -1,4 +1,5 @@
 import datetime
+
 class FrameworkDetails(object):
     def __init__(self, releaseDate, eol, lts):
         self.releaseDate = releaseDate

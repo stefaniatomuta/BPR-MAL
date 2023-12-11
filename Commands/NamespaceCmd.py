@@ -1,5 +1,5 @@
 from Commands.CommandModel import *
-from Service.NamespaceService import *
+from Service.Analysis.NamespaceService import *
 
 
 class MismatchedNamespaceCommand(FolderCommand):

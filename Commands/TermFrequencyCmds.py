@@ -1,6 +1,6 @@
 from Commands.CommandModel import *
-from Service.CodeBreakdownService import *
-from Helpers.RegexHelper import FOR_PATTERN, FOREACH_PATTERN, IF_PATTERN, WHILE_PATTERN
+from Service.Analysis.CodeBreakdownService import *
+from Helpers.RegexHelper import *
 
 
 class ForFrequencyCommand(FileNameCommand):
