@@ -1,6 +1,4 @@
-import os
-import gensim
-import tempfile
+import os, gensim, tempfile, aiofiles
 from nltk.tokenize import word_tokenize
 from collections import OrderedDict
 from Helpers.GitIgnoreHelper import *
@@ -25,11 +23,11 @@ def get_all_source_code_from_directory(directory, file_extensions):
 
 
 # lines of code count
-def get_loc_count(file_path):
+async def get_loc_count(file_path):
     lines_count = -1
     try:
-        with open(os.path.normpath(file_path), 'r') as the_file:
-            lines_count = len(the_file.readlines())
+        async with aiofiles.open(os.path.normpath(file_path), 'r') as the_file:
+            lines_count = len(await the_file.readlines())
     except Exception as err:
         print(f"WARNING: Failed to get lines count for file {file_path}, reason: {str(err)}")
     return lines_count
@@ -47,14 +45,14 @@ def get_proj_root_dir(project_root_dir):
     return project_root_dir
 
 
-def parse_source_code(source_code_files):
+async def parse_source_code(source_code_files):
     source_code = OrderedDict()
     for source_code_file in source_code_files:
         try:
             # read file but also recover from encoding errors in source files
-            with open(source_code_file, "r", errors="surrogateescape") as f:
+            async with aiofiles.open(source_code_file, "r", errors="surrogateescape") as f:
                 # Store source code with the file path as the key
-                content = f.read()
+                content = await f.read()
                 source_code[source_code_file] = content
         except Exception as err:
             print(f"ERROR: Failed to open file {source_code_file}, reason: {str(err)}")
@@ -73,10 +71,10 @@ def get_source_code_files(directory, file_extensions):
     return source_code_files
 
 
-def get_code_similarity(directory):
+async def get_code_similarity(directory):
     source_code_files = get_source_code_files(directory, "cs")
     proj_root_dir = get_proj_root_dir(directory)
-    source_code = parse_source_code(source_code_files)
+    source_code = await parse_source_code(source_code_files)
     # Create a Similarity object of all the source code
     gen_docs = [
         [word.lower() for word in word_tokenize(source_code[source_file])]

@@ -1,9 +1,8 @@
 import numpy as np
 import ast
+import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.impute import KNNImputer
-from sklearn import preprocessing, decomposition
-import pandas as pd
 from scipy import stats
 
 def global_boundaries(data):

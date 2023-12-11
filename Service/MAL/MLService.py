@@ -1,6 +1,6 @@
 import pickle
-from Service.DataPreprocessingService import *
-from Service.TransformService import *
+from Service.MAL.DataPreprocessingService import *
+from Service.ETL.TransformService import *
 
 model_pkl_path = "./Jupyter/technical_debt_model.pkl"
 pca_pkl_path = "./Jupyter/pca.pkl"
@@ -46,7 +46,7 @@ def transform_data(data):
        'ClassNumber', 'InterfaceNumber','InheritanceDeclarations', 
        'UsingsNumber','HttpClientCalls', 'CSFiles','TermFrequency','CommentLinesPerFile_Median', 'TermFrequency']
     sqrt_columns(columns, dataframe)
-    knn_df = knn_smoothing(dataframe,1)
+    knn_df = knn_smoothing(dataframe, 1)
     pca = pcas.transform(knn_df)
     return pca
 

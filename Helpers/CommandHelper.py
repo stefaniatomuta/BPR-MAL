@@ -11,4 +11,5 @@ commands = [EndOfLifeFrameworkCommand(), ForFrequencyCommand(), IfFrequencyComma
             MethodNumberCommand(), ClassNumberCommand(), InterfaceNumberCommand(), InheritanceDeclarationsCommand(),
             ExternalAPICallsCommand(), HttpClientCallsCommand(),
             UsingsNumberCommand(), ClassCouplingListingCommand(), CodeLinesPerFileCommand(),
-            CommentLinesPerFileCommand(), CodeSimilarityCommand(),CSFilesCommand(), MismatchedNamespaceCommand()]
+            CommentLinesPerFileCommand(), CodeSimilarityCommand(),
+            CSFilesCommand(), MismatchedNamespaceCommand()]

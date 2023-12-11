@@ -9,7 +9,7 @@ def get_rules(commands) -> list:
     return [type(command).__name__.rstrip("Command") for command in commands]
 
 
-def process_data_from_folder(folder_path) -> ({}, []):
+async def process_data_from_folder(folder_path) -> ({}, []):
     rules = get_rules(commands)
     sums = {}
     gitignore_content = read_gitignore()
@@ -26,20 +26,20 @@ def process_data_from_folder(folder_path) -> ({}, []):
     for command in commands:
         command_name = type(command).__name__.rstrip("Command")
         if isinstance(command, FolderCommand):
-            analysis_results = command.execute(folder_path)
+            analysis_results = await command.execute(folder_path)
             sums[command_name] = analysis_results
         if isinstance(command, FilesCommand):
-            analysis_results = command.execute(files_roots)
+            analysis_results = await command.execute(files_roots)
             sums[command_name] = analysis_results
         if isinstance(command, FilesRootCommand):
-            analysis_results = command.execute(folder_path, files_roots)
+            analysis_results = await command.execute(folder_path, files_roots)
             sums[command_name] = analysis_results
         for file_name in files_roots:
             analysis_results = (
-                command.execute(folder_path, file_name)
+                await command.execute(folder_path, file_name)
                 if isinstance(command, FileNameRootCommand)
                 else (
-                    command.execute(file_name)
+                    await command.execute(file_name)
                     if isinstance(command, FileNameCommand)
                     else None)
             )
@@ -51,5 +51,5 @@ def process_data_from_folder(folder_path) -> ({}, []):
 
             if (isinstance(analysis_results, int)):
                 sums[command_name] = sums.get(str(command_name), 0) + analysis_results
-    
+    print(sums)        
     return sums, rules

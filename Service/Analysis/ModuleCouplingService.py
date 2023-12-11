@@ -1,14 +1,14 @@
 import re
 from Helpers.RegexHelper import *
-from Service.CodeSimilarityService import *
+from Service.Analysis.CodeSimilarityService import *
 
 
-def class_coupling_mapping(files) -> dict:
+async def class_coupling_mapping(files) -> dict:
     class_coupling_list = {}
     for file_name in files:
         if file_name.endswith('.cs'):
-            with open(file_name, 'r') as f:
-                code = f.read()
+            async with aiofiles.open(file_name, 'r') as f:
+                code = await f.read()
                 class_name = r'class (\w+)?'
                 class_match = re.findall(class_name, code)
                 if len(class_match) != 0:
@@ -21,12 +21,12 @@ def class_coupling_mapping(files) -> dict:
     return class_coupling_list
 
 
-def class_coupling_listing(folder_path, files) -> dict:
+async def class_coupling_listing(folder_path, files) -> dict:
     class_coupling_list = {}
     for file_name in files:
         if file_name.endswith('.cs'):
-            with open(file_name, 'r', encoding='utf8', errors='ignore') as f:
-                code = f.read()
+            async with aiofiles.open(file_name, 'r', encoding='utf8', errors='ignore') as f:
+                code = await f.read()
                 file_base_name = file_name.replace(folder_path, "")
                 class_name = r'class (\w+)?'
                 class_match = re.findall(class_name, code)
