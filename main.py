@@ -1,7 +1,6 @@
 import multiprocessing
 from Mediator.Consumer import *
 from Mediator.Producer import *
-from Handlers.RequestHandler import *
 import asyncio
 
 def start_processing(queue):
