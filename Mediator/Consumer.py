@@ -1,4 +1,3 @@
-import time
 from Handlers.RequestHandler import process_request
 from Mediator.Producer import send_to_rabbitmq
 from Config.Config import *
@@ -31,3 +30,5 @@ def consume_from_queue(requestQueue):
     channel.basic_consume(queue=consumer_queue_name, on_message_callback=consume_callback, auto_ack=True)
     print('Consumer queue created! Listening for messages...')
     channel.start_consuming()
+
+

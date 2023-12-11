@@ -28,11 +28,9 @@ def type_and_cycle_splitter(target_framework) -> FrameworkInfo:
 async def EOL_API(target_framework) -> FrameworkInfo:
     info = type_and_cycle_splitter(target_framework)
     url = f"https://endoflife.date/api/{info.type}/{info.cycle}.json"
-    # request = requests.get(url)
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             if response.status == 200:
-                # data = json.loads(response.text)
                 data = await response.json()
                 details = FrameworkDetails(data['releaseDate'], data['eol'], data['lts'])
                 info.isEndOfLife = details.end_of_life()
