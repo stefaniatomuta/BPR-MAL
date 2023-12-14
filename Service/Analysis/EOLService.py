@@ -36,4 +36,4 @@ async def EOL_API(target_framework) -> FrameworkInfo:
                 info.isEndOfLife = details.end_of_life()
                 return info
             else:
-                print(f"Request to {url} failed with status code {response.status_code}")
+                print(f"Request to {url} failed with status code {response.status}")

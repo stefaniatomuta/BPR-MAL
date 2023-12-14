@@ -27,7 +27,7 @@ async def get_directories(folder_path) -> dict:
 async def get_namespace_analysis(folder_path) -> int:
     global directories_and_files, files_and_namespaces
     violations = 0
-    get_directories(folder_path)
+    await get_directories(folder_path)
     for file_name, m in files_and_namespaces.items():
         if file_name != m:
             violations += 1
