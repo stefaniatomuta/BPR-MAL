@@ -14,7 +14,7 @@ model = load_model(model_pkl_path)
 pcas = load_model(pca_pkl_path)
 
 
-manual_labels = {0:"Medium", 1:"High", 2:"Highest", 3:"Low"}
+manual_labels = {0:"Low", 1:"Medium", 2:"High", 3:"Very Low"}
 def map_manual_labels(cluster_label):
     return manual_labels[cluster_label]
 
